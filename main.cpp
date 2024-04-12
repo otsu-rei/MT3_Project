@@ -25,13 +25,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
+	using Input = InputManager;
+
 	// camera
 	std::unique_ptr<Camera3D> camera = std::make_unique<Camera3D>();
-	Vector3f rotate = origin;
+	Vector3f rotate    = origin;
+	Vector3f translate = origin;
 
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
+
+	const float kMoveSpeed = 0.04f;
 
 	// cross
 	Vector3f v1 = { 1.2f, -3.9f, 2.5f };
@@ -56,6 +61,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		camera->SetOnImGui();
 		ImGui::End();
 
+		if (Input::IsPressKeys(DIK_W)) {
+			translate.z += kMoveSpeed;
+		}
+
+		if (Input::IsPressKeys(DIK_S)) {
+			translate.z -= kMoveSpeed;
+		}
+
+		if (Input::IsPressKeys(DIK_A)) {
+			translate.x -= kMoveSpeed;
+		}
+
+		if (Input::IsPressKeys(DIK_D)) {
+			translate.x += kMoveSpeed;
+		}
+
 		rotate.y += 0.02f;
 
 		///
@@ -68,7 +89,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		drawer->DrawTriangle(
 			{1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
-			Matrix::MakeAffine(unitVector, rotate, origin),
+			Matrix::MakeAffine(unitVector, rotate, translate),
 			0xFF0000FF
 		);
 
