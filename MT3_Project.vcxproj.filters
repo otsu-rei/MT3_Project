@@ -41,6 +41,9 @@
     <Filter Include="Lib\3D\Camera">
       <UniqueIdentifier>{2251b601-8ee9-4118-a314-826a6212a98b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\3D\PrimitiveDrawer">
+      <UniqueIdentifier>{8715c143-fb4f-4f20-a948-f88c4f9b34c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -86,8 +89,11 @@
     <ClCompile Include="Lib\Geometry\MyVertex4.cpp">
       <Filter>Lib\Geometry\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\About\Labo\3DGameTemplate\Lib\3D\Camera\Camera3D.cpp">
+    <ClCompile Include="Lib\3D\Camera\Camera3D.cpp">
       <Filter>Lib\3D\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.cpp">
+      <Filter>Lib\3D\PrimitiveDrawer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,8 +192,14 @@
     <ClInclude Include="Lib\Geometry\MyMatrix3x3.h">
       <Filter>Lib\Geometry\Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\About\Labo\3DGameTemplate\Lib\3D\Camera\Camera3D.h">
+    <ClInclude Include="Lib\3D\Camera\Camera3D.h">
       <Filter>Lib\3D\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.h">
+      <Filter>Lib\3D\PrimitiveDrawer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
   </ItemGroup>
 </Project>
