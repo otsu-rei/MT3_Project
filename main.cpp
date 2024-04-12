@@ -21,22 +21,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
-	Matrix4x4 m1 = {
-		3.2f, 0.7f, 9.6f, 4.4f,
-		5.5f, 1.3f, 7.8f, 2.1f,
-		6.9f, 8.0f, 2.6f, 1.0f,
-		0.5f, 7.2f, 5.1f, 3.3f
-	};
+	Vector3f translate = { 4.1f, 2.6f, 0.8f };
+	Vector3f scale = { 1.5f, 5.2f, 7.3f };
+	Vector3f point = { 2.3f, 3.8f, 1.4f };
 
-	Matrix4x4 m2 = {
-		4.1f, 6.5f, 3.3f, 2.2f,
-		8.8f, 0.6f, 9.9f, 7.7f,
-		1.1f, 5.5f, 6.6f, 0.0f,
-		3.3f, 9.9f, 8.8f, 2.2f
+	Matrix4x4 transformMatrix = {
+		1.0f, 2.0f, 3.0f, 4.0f,
+		3.0f, 1.0f, 1.0f, 2.0f,
+		1.0f, 4.0f, 2.0f, 3.0f,
+		2.0f, 2.0f, 1.0f, 3.0f
 	};
-
-	const int kMatrixWidth  = MatrixNovice::kColumnWidth * 5 + 20;
-	const int kMatrixHeight = MatrixNovice::kRowHeight * 5;
 
 	/***********************************
 	 * ゲームループ *
@@ -61,15 +55,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		MatrixNovice::ScreenPrintf(0, 0,                 m1 + m2, "Add");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight,     m1 - m2, "Subtract");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 2, m1 * m2, "Multiply");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 3, Matrix::Inverse(m1), "Inverse(m1)");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 4, Matrix::Inverse(m2), "Inverse(m2)");
-
-		MatrixNovice::ScreenPrintf(kMatrixWidth, 0,                 Matrix::Transpose(m1), "Transpose(m1)");
-		MatrixNovice::ScreenPrintf(kMatrixWidth, kMatrixHeight,     Matrix::Transpose(m2), "Transpose(m2)");
-		MatrixNovice::ScreenPrintf(kMatrixWidth, kMatrixHeight * 2, Matrix4x4::MakeIdentity(), "identity");
+		VectorNovice::ScreenPrintf(0, 0, Matrix::Transform(point, transformMatrix), "transformed");
+		MatrixNovice::ScreenPrintf(0, MatrixNovice::kRowHeight, Matrix::MakeTranslate(translate), "translateMatrix");
+		MatrixNovice::ScreenPrintf(0, MatrixNovice::kRowHeight * 6, Matrix::MakeScale(scale), "scaleMatrix");
 
 		///
 		/// ↑描画処理ここまで
