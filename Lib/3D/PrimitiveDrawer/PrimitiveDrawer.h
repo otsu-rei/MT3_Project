@@ -38,7 +38,6 @@ public:
 		const Vector3f& w1, const Vector3f& w2, uint32_t color
 	);
 
-
 	void DrawTriangle(
 		const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
 		const Matrix4x4& worldMatrix,
