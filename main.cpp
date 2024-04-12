@@ -87,7 +87,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 		
-		drawer->DrawTriangle(
+		drawer->DrawTriangleCalling(
 			{1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
 			Matrix::MakeAffine(unitVector, rotate, translate),
 			0xFF0000FF

@@ -49,6 +49,22 @@ void PrimitiveDrawer::DrawTriangle(
 
 }
 
+void PrimitiveDrawer::DrawTriangleCalling(
+	const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
+	const Matrix4x4& worldMatrix,
+	uint32_t color, FillMode fillMode) {
+
+	Vector3f polygonDirection = Vector::Cross((l2 - l1), (l3 - l2));
+	polygonDirection = Matrix::Transform(polygonDirection, worldMatrix);
+	polygonDirection = Vector::Normalize(polygonDirection);
+
+	Vector3f cameraDirection = Matrix::Transform({ 0.0f, 0.0f, 1.0f }, Matrix::MakeRotate(camera_->transform_.rotate));
+
+	if (Vector::Dot(cameraDirection, polygonDirection) > 0.0f) { return; }
+
+	DrawTriangle(l1, l2, l3, worldMatrix, color, fillMode);
+}
+
 //=========================================================================================
 // private
 //=========================================================================================
