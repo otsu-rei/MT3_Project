@@ -42,9 +42,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3f v1 = { 1.2f, -3.9f, 2.5f };
 	Vector3f v2 = { 2.8f, 0.4f, -1.3f };
 
-
-
-
 	/***********************************
 	 * ゲームループ *
 	 ***********************************/
