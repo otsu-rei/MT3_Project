@@ -30,11 +30,19 @@ public:
 	//! @brief 描画するカメラの設定
 	void SetCamera(Camera3D* camera) { camera_ = camera; }
 
-	//! @brief v1からv2への線の描画
-	//! 
-	//! @param[in] w.. world座標
+	//! w -> ワールド座標
+	//! l -> ローカル座標(worldMatrixが必須)
+
+	
 	void DrawLine(
 		const Vector3f& w1, const Vector3f& w2, uint32_t color
+	);
+
+
+	void DrawTriangle(
+		const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
+		const Matrix4x4& worldMatrix,
+		uint32_t color, FillMode fillMode = kFillModeSolid
 	);
 
 private:
@@ -49,7 +57,7 @@ private:
 	// private methods
 	//=========================================================================================
 
-	const Vector2f& ChangeScreenPos(const Vector3f& worldPos);
-	const Vector2f& ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix);
+	Vector2f ChangeScreenPos(const Vector3f& worldPos);
+	Vector2f ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix);
 
 };

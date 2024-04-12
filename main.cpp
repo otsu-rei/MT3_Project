@@ -1,7 +1,7 @@
 #include <Novice.h>
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <ImGui.h>
+#include <memory>
 
 // Lib //
 #include "Environment.h"
@@ -12,6 +12,10 @@
 #include "MyVector3.h"
 #include "MyMatrix4x4.h"
 
+// 3D //
+#include "Camera3D.h"
+#include "PrimitiveDrawer.h"
+
 /***********************************
  * メイン関数 *
  ***********************************/
@@ -21,7 +25,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
-	const int kMatrixHeight = MatrixNovice::kRowHeight * 5;
+	// camera
+	std::unique_ptr<Camera3D> camera = std::make_unique<Camera3D>();
+	Vector3f rotate = origin;
+
+	// drawer
+	auto drawer = PrimitiveDrawer::GetInstance();
+	drawer->SetCamera(camera.get());
+
+	// cross
+	Vector3f v1 = { 1.2f, -3.9f, 2.5f };
+	Vector3f v2 = { 2.8f, 0.4f, -1.3f };
 
 	/***********************************
 	 * ゲームループ *
@@ -38,33 +52,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		ImGui::Begin("Editor");
+		camera->SetOnImGui();
+		ImGui::End();
+
+		rotate.y += 0.02f;
+
 		///
 		/// ↑更新処理ここまで
 		///
 
-		
-
 		///
 		/// ↓描画処理ここから
 		///
-
-		MatrixNovice::ScreenPrintf(
-			0, 0,
-			Matrix::MakeOrthographic(-160.0f, 160.0f, 200.0f, 300.0f, 0.0f, 1000.0f),
-			"orthographic"
+		
+		drawer->DrawTriangle(
+			{1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
+			Matrix::MakeAffine(unitVector, rotate, origin),
+			0xFF0000FF
 		);
 
-		MatrixNovice::ScreenPrintf(
-			0, kMatrixHeight,
-			Matrix::MakePerspectiveFov(0.63f, 1.33f, 0.1f, 1000.0f),
-			"perspective"
-		);
-
-		MatrixNovice::ScreenPrintf(
-			0, kMatrixHeight * 2,
-			Matrix::MakeViewport(100.0f, 200.0f, 600.0f, 300.0f, 0.0f, 1.0f),
-			"viewport"
-		);
+		VectorNovice::ScreenPrintf(0, 0, Vector::Cross(v1, v2), "cross");
 
 		///
 		/// ↑描画処理ここまで
@@ -78,6 +86,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 	}
+
+	camera.reset();
 
 	// ライブラリの終了
 	Novice::Finalize();

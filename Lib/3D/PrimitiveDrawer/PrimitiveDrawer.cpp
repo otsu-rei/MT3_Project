@@ -17,16 +17,43 @@ void PrimitiveDrawer::DrawLine(
 	pos[1] = ChangeScreenPos(w2);
 
 	Novice::DrawLine(
-		static_cast<int>(w1.x),
-		static_cast<int>(w1.y),
-		static_cast<int>(w2.x),
-		static_cast<int>(w2.y),
+		static_cast<int>(pos[0].x),
+		static_cast<int>(pos[0].y),
+		static_cast<int>(pos[1].x),
+		static_cast<int>(pos[1].y),
 		color
 	);
 
 }
 
-const Vector2f& PrimitiveDrawer::ChangeScreenPos(const Vector3f& worldPos) {
+void PrimitiveDrawer::DrawTriangle(
+	const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
+	const Matrix4x4& worldMatrix,
+	uint32_t color, FillMode fillMode) {
+
+	Vector2f pos[3];
+	pos[0] = ChangeScreenPos(l1, worldMatrix);
+	pos[1] = ChangeScreenPos(l2, worldMatrix);
+	pos[2] = ChangeScreenPos(l3, worldMatrix);
+
+	Novice::DrawTriangle(
+		static_cast<int>(pos[0].x),
+		static_cast<int>(pos[0].y),
+		static_cast<int>(pos[1].x),
+		static_cast<int>(pos[1].y),
+		static_cast<int>(pos[2].x),
+		static_cast<int>(pos[2].y),
+		color,
+		fillMode
+	);
+
+}
+
+//=========================================================================================
+// private
+//=========================================================================================
+
+Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& worldPos) {
 	Vector3f result;
 	
 	Matrix4x4 wvpMatrix = Matrix4x4::MakeIdentity() * camera_->GetViewProjMatrix();
@@ -36,7 +63,7 @@ const Vector2f& PrimitiveDrawer::ChangeScreenPos(const Vector3f& worldPos) {
 	return { result.x, result.y };
 }
 
-const Vector2f& PrimitiveDrawer::ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix) {
+Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix) {
 	Vector3f result;
 
 	Matrix4x4 wvpMatrix = worldMatrix * camera_->GetViewProjMatrix();

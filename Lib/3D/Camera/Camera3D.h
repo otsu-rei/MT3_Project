@@ -50,7 +50,7 @@ public:
 	void SetViewport(float left, float top, float width, float height, float minDepth, float maxDepth);
 
 	//! @brief viewMatrix * projMatrix の取得
-	const Matrix4x4& GetViewProjMatrix() const { return viewMatrix_ * projectionMatrix_; }
+	Matrix4x4 GetViewProjMatrix() const { return viewMatrix_ * projectionMatrix_; }
 
 	//! @brief viewprotMatrix の取得
 	const Matrix4x4& GetViewportMatrix() const { return viewportMatrix_; }
@@ -69,9 +69,9 @@ private:
 	// Control structure
 	////////////////////////////////////////////////////////////////////////////////////////////
 	struct Control {
-		Vector3f center;
-		float lon, lat;
-		float distance;
+		Vector3f center = origin;
+		float lon = 0.0f, lat = 0.0f;
+		float distance = 10.0f;
 	};
 
 	//=========================================================================================

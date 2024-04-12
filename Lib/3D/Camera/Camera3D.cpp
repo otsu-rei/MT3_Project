@@ -13,7 +13,7 @@
 void Camera3D::Init() {
 
 	transform_.rotate    = { 0.26f, 0.0f, 0.0f };
-	transform_.translate = { 0.0f, 1.9f, 10.0f };
+	transform_.translate = { 0.0f, 1.9f, -6.49f };
 	UpdateMatrix();
 
 	SetProjection(0.45f, static_cast<float>(kWindowWidth) / static_cast<float>(kWindowHeight), 5.0f, 1000.0f); // default projection
