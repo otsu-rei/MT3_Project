@@ -21,16 +21,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
-	Vector3f translate = { 4.1f, 2.6f, 0.8f };
-	Vector3f scale = { 1.5f, 5.2f, 7.3f };
-	Vector3f point = { 2.3f, 3.8f, 1.4f };
+	Vector3f rotate = { 0.4f, 1.43f, -0.8f };
 
-	Matrix4x4 transformMatrix = {
-		1.0f, 2.0f, 3.0f, 4.0f,
-		3.0f, 1.0f, 1.0f, 2.0f,
-		1.0f, 4.0f, 2.0f, 3.0f,
-		2.0f, 2.0f, 1.0f, 3.0f
-	};
+	const int kMatrixHeight = MatrixNovice::kRowHeight * 5;
 
 	/***********************************
 	 * ゲームループ *
@@ -51,13 +44,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↑更新処理ここまで
 		///
 
+		MatrixNovice::ScreenPrintf(0, 0,                 Matrix::MakeRotateX(rotate.x), "rotateXMatrix");
+		MatrixNovice::ScreenPrintf(0, kMatrixHeight,     Matrix::MakeRotateX(rotate.y), "rotateYMatrix");
+		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 2, Matrix::MakeRotateX(rotate.z), "rotateZMatrix");
+		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 3, Matrix::MakeRotate(rotate), "rotateMatrix");
+
 		///
 		/// ↓描画処理ここから
 		///
 
-		VectorNovice::ScreenPrintf(0, 0, Matrix::Transform(point, transformMatrix), "transformed");
-		MatrixNovice::ScreenPrintf(0, MatrixNovice::kRowHeight, Matrix::MakeTranslate(translate), "translateMatrix");
-		MatrixNovice::ScreenPrintf(0, MatrixNovice::kRowHeight * 6, Matrix::MakeScale(scale), "scaleMatrix");
+		
 
 		///
 		/// ↑描画処理ここまで

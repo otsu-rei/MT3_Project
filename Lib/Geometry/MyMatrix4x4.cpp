@@ -10,96 +10,70 @@ Matrix4x4 Matrix::MakeScale(const Vector3f& scale) {
 	};
 }
 
-Matrix4x4 Matrix::MakeRotate(float radian, RotateType type) {
-	switch (type) {
+Matrix4x4 Matrix::MakeRotateX(float radian) {
+	return {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, std::cos(radian), std::sin(radian), 0.0f,
+		0.0f, -std::sin(radian), std::cos(radian), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+}
 
-		case RotateType::kRotateBaseX:
+Matrix4x4 Matrix::MakeRotateY(float radian) {
+	return {
+		std::cos(radian), 0.0f, -std::sin(radian), 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		std::sin(radian), 0.0f, std::cos(radian), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+	};
+}
 
-			return {
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, std::cos(radian), std::sin(radian), 0.0f,
-				0.0f, -std::sin(radian), std::cos(radian), 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
-			};
-
-			break;
-
-		case RotateType::kRotateBaseY:
-
-			return {
-				std::cos(radian), 0.0f, -std::sin(radian), 0.0f,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				std::sin(radian), 0.0f, std::cos(radian), 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f,
-			};
-
-			break;
-
-		case RotateType::kRotateBaseZ:
-
-			return {
-				std::cos(radian), std::sin(radian), 0.0f, 0.0f,
-				-std::sin(radian), std::cos(radian), 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f,
-			};
-
-			break;
-	}
-
-	return { 0.0f };
+Matrix4x4 Matrix::MakeRotateZ(float radian) {
+	return {
+		std::cos(radian), std::sin(radian), 0.0f, 0.0f,
+		-std::sin(radian), std::cos(radian), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+	};
 }
 
 Matrix4x4 Matrix::MakeRotate(const Vector3f& rotate) {
-	return Matrix::MakeRotate(rotate.x, kRotateBaseX)
-		* Matrix::MakeRotate(rotate.y, kRotateBaseY)
-		* Matrix::MakeRotate(rotate.z, kRotateBaseZ);
+	return Matrix::MakeRotateX(rotate.x)
+		* Matrix::MakeRotateY(rotate.y)
+		* Matrix::MakeRotateZ(rotate.z);
 }
 
-Matrix4x4 Matrix::MakeRotateEuler(float radian, RotateType type) {
-	switch (type) {
+Matrix4x4 Matrix::MakeRotateEulerX(float radian) {
+	return {
+		std::cos(radian), -std::sin(radian), 0, 0,
+		std::sin(radian), std::cos(radian), 0, 0,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+}
 
-		case RotateType::kRotateBaseX:
+Matrix4x4 Matrix::MakeRotateEulerY(float radian) {
+	return {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, std::cos(radian), -std::sin(radian), 0.0f,
+		0.0f, std::sin(radian), std::cos(radian), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+}
 
-			return {
-				std::cos(radian), -std::sin(radian), 0, 0,
-				std::sin(radian), std::cos(radian), 0, 0,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
-			};
-
-			break;
-
-		case RotateType::kRotateBaseY:
-
-			return {
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, std::cos(radian), -std::sin(radian), 0.0f,
-				0.0f, std::sin(radian), std::cos(radian), 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
-			};
-
-			break;
-
-		case RotateType::kRotateBaseZ:
-
-			return {
-				std::cos(radian), 0, std::sin(radian), 0,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				-std::sin(radian), 0, std::cos(radian), 0,
-				0.0f, 0.0f, 0.0f, 1.0f,
-			};
-
-			break;
-	}
-
-	return { 0.0f };
+Matrix4x4 Matrix::MakeRotateEulerZ(float radian) {
+	return {
+		std::cos(radian), 0, std::sin(radian), 0,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		-std::sin(radian), 0, std::cos(radian), 0,
+		0.0f, 0.0f, 0.0f, 1.0f,
+	};
 }
 
 Matrix4x4 Matrix::MakeRotateEuler(const Vector3f& rotate) {
-	return Matrix::MakeRotateEuler(rotate.x, kRotateBaseX)
-		* Matrix::MakeRotateEuler(rotate.y, kRotateBaseY)
-		* Matrix::MakeRotateEuler(rotate.z, kRotateBaseZ);
+	return Matrix::MakeRotateEulerX(rotate.x)
+		* Matrix::MakeRotateEulerY(rotate.y)
+		* Matrix::MakeRotateEulerZ(rotate.z);
 }
 
 Matrix4x4 Matrix::MakeTranslate(const Vector3f& translate) {

@@ -97,25 +97,20 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// enum RotateType
-////////////////////////////////////////////////////////////////////////////////////////////
-enum RotateType {
-	kRotateBaseX,
-	kRotateBaseY,
-	kRotateBaseZ,
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////
 // Matrix namespace
 ////////////////////////////////////////////////////////////////////////////////////////////
 namespace Matrix {
 
 	Matrix4x4 MakeScale(const Vector3f& scale);
 
-	Matrix4x4 MakeRotate(float radian, RotateType type);
+	Matrix4x4 MakeRotateX(float radian);
+	Matrix4x4 MakeRotateY(float radian);
+	Matrix4x4 MakeRotateZ(float radian);
 	Matrix4x4 MakeRotate(const Vector3f& rotate);
 
-	Matrix4x4 MakeRotateEuler(float radian, RotateType type);
+	Matrix4x4 MakeRotateEulerX(float radian);
+	Matrix4x4 MakeRotateEulerY(float radian);
+	Matrix4x4 MakeRotateEulerZ(float radian);
 	Matrix4x4 MakeRotateEuler(const Vector3f& rotate);
 
 	Matrix4x4 MakeTranslate(const Vector3f& translate);
