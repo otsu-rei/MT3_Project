@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="KamataEngine">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="KamataEngine\Source">
+      <UniqueIdentifier>{d966e9f8-e880-44ae-8586-a08515e4cffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KamataEngine\Include">
+      <UniqueIdentifier>{4aae4e40-94f7-4d32-9a91-c0c37a2edf0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KamataEngine\Adapter">
+      <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{d438fc8f-472d-4abe-b125-19820beea33d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Content">
+      <UniqueIdentifier>{2e5317c4-ff73-4dbe-8848-e8889e36f0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Geometry">
+      <UniqueIdentifier>{4a696bb1-c0db-41d4-9f55-2b958dfd43c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Geometry\Include">
+      <UniqueIdentifier>{13c68254-5134-46e0-accb-68b201fb6a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Geometry\Source">
+      <UniqueIdentifier>{26bdf3e7-018b-4e8f-bd8a-af8d23a24d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Content\Include">
+      <UniqueIdentifier>{ea889db2-96e4-4e95-a96c-d85f29e4e857}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Content\Source">
+      <UniqueIdentifier>{5b3fb0dd-3ced-4cc1-9e8a-a2fb39ee24f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\3D">
+      <UniqueIdentifier>{c24112ec-9170-4c9e-a29c-63d5bbfc1fc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\3D\Camera">
+      <UniqueIdentifier>{2251b601-8ee9-4118-a314-826a6212a98b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
+      <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\base\TextureManager.cpp">
+      <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\scene\GameScene.cpp">
+      <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp">
+      <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
+      <Filter>KamataEngine\Adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp">
+      <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Content\GameTextureManager.cpp">
+      <Filter>Lib\Content\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Content\InputManager.cpp">
+      <Filter>Lib\Content\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyMatrix3x3.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyMatrix4x4.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyVector2.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyVector3.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyVertex4.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\About\Labo\3DGameTemplate\Lib\3D\Camera\Camera3D.cpp">
+      <Filter>Lib\3D\Camera</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\2d\DebugText.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\input\Input.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\Model.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\base\SafeDelete.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\2d\Sprite.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\base\TextureManager.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\ViewProjection.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\base\WinApp.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\WorldTransform.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
+      <Filter>KamataEngine\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\CircleShadow.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\DebugCamera.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\DirectionalLight.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\LightGroup.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\Material.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\Mesh.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\PointLight.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\3d\SpotLight.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h" />
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h" />
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector3.h" />
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h" />
+    <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h" />
+    <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h">
+      <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Content\GameTextureManager.h">
+      <Filter>Lib\Content\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Content\InputManager.h">
+      <Filter>Lib\Content\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Environment.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyVertex4.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyVector3.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyVector2.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyMatrix4x4.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyMatrix3x3.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\About\Labo\3DGameTemplate\Lib\3D\Camera\Camera3D.h">
+      <Filter>Lib\3D\Camera</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
