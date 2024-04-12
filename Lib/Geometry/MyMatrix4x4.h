@@ -134,3 +134,15 @@ namespace Matrix {
 
 	Vector3f Transform(const Vector3f& vector, const Matrix4x4& matrix);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// MatrixNovice namespace
+////////////////////////////////////////////////////////////////////////////////////////////
+namespace MatrixNovice {
+
+	static const int kRowHeight   = 20;
+	static const int kColumnWidth = 60;
+
+	void ScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
+
+}
