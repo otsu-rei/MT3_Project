@@ -21,9 +21,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
+	Vector3f scale = { 1.2f, 0.79f, -2.1f };
 	Vector3f rotate = { 0.4f, 1.43f, -0.8f };
-
-	const int kMatrixHeight = MatrixNovice::kRowHeight * 5;
+	Vector3f translate = { 2.7f, -4.15f, 1.57f };
 
 	/***********************************
 	 * ゲームループ *
@@ -44,16 +44,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↑更新処理ここまで
 		///
 
-		MatrixNovice::ScreenPrintf(0, 0,                 Matrix::MakeRotateX(rotate.x), "rotateXMatrix");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight,     Matrix::MakeRotateX(rotate.y), "rotateYMatrix");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 2, Matrix::MakeRotateX(rotate.z), "rotateZMatrix");
-		MatrixNovice::ScreenPrintf(0, kMatrixHeight * 3, Matrix::MakeRotate(rotate), "rotateMatrix");
+		
 
 		///
 		/// ↓描画処理ここから
 		///
 
-		
+		MatrixNovice::ScreenPrintf(0, 0, Matrix::MakeAffine(scale, rotate, translate), "worldMatrix");
 
 		///
 		/// ↑描画処理ここまで
