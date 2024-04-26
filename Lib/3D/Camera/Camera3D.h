@@ -60,6 +60,8 @@ public:
 
 	void SetOnImGui();
 
+	void UpdateControl();
+
 	//=========================================================================================
 	// public variables
 	//=========================================================================================
@@ -86,6 +88,7 @@ private:
 	Matrix4x4 viewportMatrix_;
 
 	// debug追加機能として
+	bool isUseControl_ = false;
 	Control control_;
 
 };

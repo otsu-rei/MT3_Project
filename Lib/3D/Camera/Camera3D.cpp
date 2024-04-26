@@ -4,6 +4,8 @@
 // include
 //-----------------------------------------------------------------------------------------
 #include <Environment.h>
+#include <InputManager.h>
+#include <Novice.h>
 #include <imgui.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,12 +41,67 @@ void Camera3D::SetViewport(
 void Camera3D::SetOnImGui() {
 	if (ImGui::TreeNode("camera")) {
 
-		ImGui::DragFloat3("scale",     &transform_.scale.x, 0.02f);
-		ImGui::DragFloat3("rotate",    &transform_.rotate.x, 0.02f);
-		ImGui::DragFloat3("translate", &transform_.translate.x, 0.02f);
+		ImGui::Checkbox("isUseControl", &isUseControl_);
+
+		if (isUseControl_) {
+
+			ImGui::DragFloat3("center", &control_.center.x, 0.02f);
+			ImGui::DragFloat("lon", &control_.lon, 0.02f);
+			ImGui::DragFloat("lat", &control_.lat, 0.02f);
+			ImGui::DragFloat("distance", &control_.distance, 0.02f);
+
+			UpdateControl();
+
+		} else {
+			ImGui::DragFloat3("scale", &transform_.scale.x, 0.02f);
+			ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.02f);
+			ImGui::DragFloat3("translate", &transform_.translate.x, 0.02f);
+		}
 
 		ImGui::TreePop();
 	}
+
+	UpdateMatrix();
+}
+
+void Camera3D::UpdateControl() {
+	// parameter //
+	const float deltaMove = 0.01f;
+	const float deltaRotate = 1.0f / 100.0f;
+
+	/// Update ///
+	if (InputManager::IsPressMouse(2)) {
+		if (InputManager::IsPressKeys(DIK_LSHIFT)) {
+			control_.center += (
+				Matrix::Transform(
+					{ static_cast<float>(InputManager::GetPreMousePos().x - InputManager::GetMousePos().x) * deltaMove, static_cast<float>(InputManager::GetMousePos().y - InputManager::GetPreMousePos().y) * deltaMove, 0.0f },
+					Matrix::MakeRotate(transform_.rotate))
+				);
+
+		} else {
+			control_.lon += (InputManager::GetMousePos().x - InputManager::GetPreMousePos().x) * deltaRotate;
+			control_.lat += (InputManager::GetMousePos().y - InputManager::GetPreMousePos().y) * deltaRotate;
+		}
+
+	}
+
+	if (Novice::GetWheel() > 0) { control_.distance -= 0.5f; }
+	else if (Novice::GetWheel() < 0) { control_.distance += 0.5f; }
+
+	// translate
+	Vector3f point = {
+		std::cos(control_.lat) * -std::sin(control_.lon),
+		std::sin(control_.lat),
+		std::cos(control_.lat) * -std::cos(control_.lon),
+	};
+
+	point *= control_.distance;
+
+	transform_.translate = point + control_.center;
+
+	// rotate
+	transform_.rotate.x = control_.lat;
+	transform_.rotate.y = control_.lon;
 
 	UpdateMatrix();
 }
