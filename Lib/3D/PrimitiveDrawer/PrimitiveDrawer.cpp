@@ -1,5 +1,10 @@
 #include "PrimitiveDrawer.h"
 
+//-----------------------------------------------------------------------------------------
+// include
+//-----------------------------------------------------------------------------------------
+#include <numbers>
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // PrimitiveDrawer class methods
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +68,84 @@ void PrimitiveDrawer::DrawTriangleCalling(
 	if (Vector::Dot(cameraDirection, polygonDirection) > 0.0f) { return; }
 
 	DrawTriangle(l1, l2, l3, worldMatrix, color, fillMode);
+}
+
+void PrimitiveDrawer::DrawGrid(
+	const Vector3f& center,
+	float gridLength, const uint32_t kSubdivision,
+	uint32_t color) {
+
+	if (kSubdivision == 0) { return; } //!< 描画しないので早期return
+	// todo: kSubdivision = 1 の時の処理の追加
+
+	// grid一本の長さ
+	float kGridLength = gridLength / static_cast<float>(kSubdivision - 1);
+
+	// grid半分の長さ
+	float kGridHalfLength = gridLength / 2.0f;
+
+	for (uint32_t index = 0; index < kSubdivision; ++index) {
+
+		float localGridBorder = kGridHalfLength - (index * kGridLength);
+
+		// z軸方向へのgrid線
+		DrawLine(
+			{ center.x + localGridBorder, center.y, center.z - kGridHalfLength },
+			{ center.x + localGridBorder, center.y, center.z + kGridHalfLength },
+			color
+		);
+
+		// x軸方法へのgrid線
+		DrawLine(
+			{ center.x - kGridHalfLength, center.y, center.z + localGridBorder },
+			{ center.x + kGridHalfLength, center.y, center.z + localGridBorder },
+			color
+		);
+	}
+
+}
+
+void PrimitiveDrawer::DrawSphere(
+	const Vector3f& center, float radius, const uint32_t kSubdivision, uint32_t color) {
+
+
+	const float kLatEvery = (std::numbers::pi_v<float> * 2.0f) / static_cast<float>(kSubdivision); // horizontal
+	const float kLonEvery = std::numbers::pi_v<float> / static_cast<float>(kSubdivision); // vertical
+
+	enum PointName {
+		A, B, C,
+	};
+
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
+		float lat = -std::numbers::pi_v<float> / 2.0f + kLatEvery * latIndex;
+
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+			float lon = lonIndex * kLonEvery;
+
+			Vector3f point[3];
+
+			point[A] = { std::cos(lat) * std::cos(lon), std::sin(lat), std::cos(lat) * std::sin(lon) };;
+			point[A] *= radius;
+
+			point[B] = {
+				std::cos(lat + kLatEvery) * std::cos(lon),
+				std::sin(lat + kLatEvery),
+				std::cos(lat + kLatEvery) * std::sin(lon)
+			};
+			point[B] *= radius;
+
+			point[C] = {
+				std::cos(lat) * std::cos(lon + kLonEvery),
+				std::sin(lat),
+				std::cos(lat) * std::sin(lon + kLonEvery),
+			};
+			point[C] *= radius;
+
+			DrawLine(point[A] + center, point[B] + center, color);
+			DrawLine(point[A] + center, point[C] + center, color);
+
+		}
+	}
 }
 
 //=========================================================================================

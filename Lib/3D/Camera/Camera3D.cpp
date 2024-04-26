@@ -37,7 +37,7 @@ void Camera3D::SetViewport(
 }
 
 void Camera3D::SetOnImGui() {
-	if (ImGui::TreeNode("todo: cameraName")) {
+	if (ImGui::TreeNode("camera")) {
 
 		ImGui::DragFloat3("scale",     &transform_.scale.x, 0.02f);
 		ImGui::DragFloat3("rotate",    &transform_.rotate.x, 0.02f);

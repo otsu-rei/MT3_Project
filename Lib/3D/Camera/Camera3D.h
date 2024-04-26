@@ -55,6 +55,7 @@ public:
 	//! @brief viewprotMatrix の取得
 	const Matrix4x4& GetViewportMatrix() const { return viewportMatrix_; }
 
+	//! @brief カメラTransform の取得
 	const Transform& GetTransform() const { return transform_; }
 
 	void SetOnImGui();

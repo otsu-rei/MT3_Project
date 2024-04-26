@@ -49,6 +49,17 @@ public:
 		uint32_t color, FillMode fillMode = kFillModeSolid
 	);
 
+	void DrawGrid(
+		const Vector3f& center,
+		float gridLength, const uint32_t kSubdivision,
+		uint32_t color
+	);
+
+	void DrawSphere(
+		const Vector3f& center, float radius, const uint32_t kSubdivision,
+		uint32_t color
+	);
+
 
 
 private:

@@ -95,6 +95,9 @@
     <ClCompile Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.cpp">
       <Filter>Lib\3D\PrimitiveDrawer</Filter>
     </ClCompile>
+    <ClCompile Include="Lib\Geometry\MyVector4.cpp">
+      <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.h">
       <Filter>Lib\3D\PrimitiveDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\MyVector4.h">
+      <Filter>Lib\Geometry\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -29,18 +29,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// camera
 	std::unique_ptr<Camera3D> camera = std::make_unique<Camera3D>();
-	Vector3f rotate    = origin;
-	Vector3f translate = origin;
+
+	// sphere
+	Vector3f center = origin;
+	float radius    = 1.0f;
+
 
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
-
-	const float kMoveSpeed = 0.04f;
-
-	// cross
-	Vector3f v1 = { 1.2f, -3.9f, 2.5f };
-	Vector3f v2 = { 2.8f, 0.4f, -1.3f };
 
 	/***********************************
 	 * ゲームループ *
@@ -51,7 +48,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::BeginFrame();
 
 		// キー入力を受け取る
-		InputManager::Update();
+		Input::Update();
 
 		///
 		/// ↓更新処理ここから
@@ -59,25 +56,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
+
+		if (ImGui::TreeNode("sphere")) {
+
+			ImGui::DragFloat3("center", &center.x, 0.01f);
+			ImGui::DragFloat("radius",  &radius,   0.01f);
+
+			ImGui::TreePop();
+		}
+
 		ImGui::End();
-
-		if (Input::IsPressKeys(DIK_W)) {
-			translate.z += kMoveSpeed;
-		}
-
-		if (Input::IsPressKeys(DIK_S)) {
-			translate.z -= kMoveSpeed;
-		}
-
-		if (Input::IsPressKeys(DIK_A)) {
-			translate.x -= kMoveSpeed;
-		}
-
-		if (Input::IsPressKeys(DIK_D)) {
-			translate.x += kMoveSpeed;
-		}
-
-		rotate.y += 0.02f;
 
 		///
 		/// ↑更新処理ここまで
@@ -87,13 +75,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 		
-		drawer->DrawTriangleCalling(
-			{1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
-			Matrix::MakeAffine(unitVector, rotate, translate),
-			0xFF0000FF
+		drawer->DrawGrid(
+			{0.0f, 0.0f, 0.0f},
+			4.0f, 10, 0x505050FF
 		);
 
-		VectorNovice::ScreenPrintf(0, 0, Vector::Cross(v1, v2), "cross");
+		drawer->DrawSphere(
+			center,
+			radius, 20, 0xFAFAFAFF
+		);
 
 		///
 		/// ↑描画処理ここまで
@@ -103,7 +93,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::EndFrame();
 
 		// ESCキーが押されたらループを抜ける
-		if (InputManager::IsTriggerKeys(DIK_F4)) {
+		if (Input::IsTriggerKeys(DIK_F4)) {
 			break;
 		}
 	}

@@ -123,6 +123,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Lib\Geometry\MyMatrix4x4.cpp" />
     <ClCompile Include="Lib\Geometry\MyVector2.cpp" />
     <ClCompile Include="Lib\Geometry\MyVector3.cpp" />
+    <ClCompile Include="Lib\Geometry\MyVector4.cpp" />
     <ClCompile Include="Lib\Geometry\MyVertex4.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Lib\Geometry\MyMatrix4x4.h" />
     <ClInclude Include="Lib\Geometry\MyVector2.h" />
     <ClInclude Include="Lib\Geometry\MyVector3.h" />
+    <ClInclude Include="Lib\Geometry\MyVector4.h" />
     <ClInclude Include="Lib\Geometry\MyVertex4.h" />
   </ItemGroup>
   <ItemGroup>
