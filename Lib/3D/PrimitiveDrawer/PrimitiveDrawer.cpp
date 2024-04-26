@@ -124,7 +124,7 @@ void PrimitiveDrawer::DrawSphere(
 
 			Vector3f point[3];
 
-			point[A] = { std::cos(lat) * std::cos(lon), std::sin(lat), std::cos(lat) * std::sin(lon) };;
+			point[A] = { std::cos(lat) * std::cos(lon), std::sin(lat), std::cos(lat) * std::sin(lon) };
 			point[A] *= radius;
 
 			point[B] = {
