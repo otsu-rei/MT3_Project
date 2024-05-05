@@ -79,11 +79,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawSphere(
-			center,
-			radius, 20, 0xFAFAFAFF
-		);
-
 		///
 		/// ↑描画処理ここまで
 		///
