@@ -37,11 +37,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	drawer->SetCamera(camera.get());
 
 	// main
-	Segment segment = { {-2.0f, -1.0f, 0.0f}, {3.0f, 2.0f, 2.0f} };
-	Vector3f point = { -1.5f, 0.6f, 0.6f };
+	Sphere sphere[2];
 
-	Vector3f project; 
-	Vector3f closestPoint;
+	for (int i = 0; i < 2; ++i) {
+		sphere[i].radius = 0.5f;
+		sphere[i].center = { i * 1.0f, i * 1.0f, i * 1.0f };
+	}
+
+	uint32_t color = 0xFAFAFAFF;
 
 	/***********************************
 	 * ゲームループ *
@@ -63,29 +66,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::Separator();
 
-		if (ImGui::CollapsingHeader("Segment")) {
-			ImGui::DragFloat3("origin", &segment.origin.x, 0.01f);
-			ImGui::DragFloat3("diff",   &segment.diff.x,   0.01f);
+		for (int i = 0; i < 2; ++i) {
+			std::string label = std::format("sphere[{}]", i);
+
+			if (ImGui::TreeNode(label.c_str())) {
+				ImGui::DragFloat3("center", &sphere[i].center.x, 0.01f);
+				ImGui::DragFloat("radius",  &sphere[i].radius,   0.01f);
+
+				ImGui::TreePop();
+			}
 		}
 
-		if (ImGui::CollapsingHeader("point")) {
-			ImGui::DragFloat3("position", &point.x, 0.01f);
+		color = 0xFAFAFAFF; //!< default color
+
+		if (Collider::SphereTo(sphere[0], sphere[1])) {
+			color = 0xFA0000FF;
 		}
-
-		project = Project(point - segment.origin, segment.diff);
-		closestPoint = ClosestPoint(point, segment);
-
-		ImGui::Spacing();
-
-		ImGui::Text(
-			"[project] x: %.3f, y: %.3f, z: %.3f",
-			project.x, project.y, project.z
-		);
-
-		ImGui::Text(
-			"[closestPoint] x: %.3f, y: %.3f, z: %.3f",
-			closestPoint.x, closestPoint.y, closestPoint.z
-		);
 
 		ImGui::End();
 
@@ -102,21 +98,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawLine(
-			segment.origin,
-			segment.origin + segment.diff,
-			0xFAFAFAFF
-		);
-
-		drawer->DrawSphere(
-			point, 0.01f, 10,
-			0xFA0000FF
-		);
-
-		drawer->DrawSphere(
-			closestPoint, 0.01f, 10,
-			0x0F0F0FFF
-		);
+		for (int i = 0; i < 2; ++i) {
+			drawer->DrawSphere(
+				sphere[i].center, sphere[i].radius,
+				16, color
+			);
+		}
 
 		///
 		/// ↑描画処理ここまで

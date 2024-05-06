@@ -20,3 +20,17 @@ Vector3f ClosestPoint(const Vector3f& point, const Segment& segment) {
 
 	return result;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// Collider namespace methods
+////////////////////////////////////////////////////////////////////////////////////////////
+
+bool Collider::SphereTo(const Sphere& a, const Sphere& b) {
+	float distance = Vector::Length(a.center - b.center);
+
+	if (distance <= a.radius + b.radius) {
+		return true;
+	}
+
+	return false;
+}
