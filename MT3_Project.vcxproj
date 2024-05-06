@@ -61,7 +61,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Lib\3D\PrimitiveDrawer;$(ProjectDir)\Lib\3D\Camera;$(ProjectDir)\Lib\Content;$(ProjectDir)\Lib\Geometry;$(ProjectDir)\Lib;$(ProjectDir);C:\KamataEngine\DirectXGame\math;C:\KamataEngine\DirectXGame\2d;C:\KamataEngine\DirectXGame\3d;C:\KamataEngine\DirectXGame\audio;C:\KamataEngine\DirectXGame\base;C:\KamataEngine\DirectXGame\input;C:\KamataEngine\DirectXGame\scene;C:\KamataEngine\External\DirectXTex\include;C:\KamataEngine\External\imgui;C:\KamataEngine\Adapter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Lib\3D\Collider;$(ProjectDir)\Lib\3D\PrimitiveDrawer;$(ProjectDir)\Lib\3D\Camera;$(ProjectDir)\Lib\Content;$(ProjectDir)\Lib\Geometry;$(ProjectDir)\Lib;$(ProjectDir);C:\KamataEngine\DirectXGame\math;C:\KamataEngine\DirectXGame\2d;C:\KamataEngine\DirectXGame\3d;C:\KamataEngine\DirectXGame\audio;C:\KamataEngine\DirectXGame\base;C:\KamataEngine\DirectXGame\input;C:\KamataEngine\DirectXGame\scene;C:\KamataEngine\External\DirectXTex\include;C:\KamataEngine\External\imgui;C:\KamataEngine\Adapter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -116,6 +116,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="Lib\3D\Camera\Camera3D.cpp" />
+    <ClCompile Include="Lib\3D\Collider\Collider.cpp" />
     <ClCompile Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.cpp" />
     <ClCompile Include="Lib\Content\GameTextureManager.cpp" />
     <ClCompile Include="Lib\Content\InputManager.cpp" />
@@ -125,6 +126,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Lib\Geometry\MyVector3.cpp" />
     <ClCompile Include="Lib\Geometry\MyVector4.cpp" />
     <ClCompile Include="Lib\Geometry\MyVertex4.cpp" />
+    <ClCompile Include="Lib\MyMath.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +158,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Lib\3D\Camera\Camera3D.h" />
+    <ClInclude Include="Lib\3D\Collider\Collider.h" />
     <ClInclude Include="Lib\3D\PrimitiveDrawer\PrimitiveDrawer.h" />
     <ClInclude Include="Lib\Content\GameTextureManager.h" />
     <ClInclude Include="Lib\Content\InputManager.h" />
@@ -166,6 +169,8 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Lib\Geometry\MyVector3.h" />
     <ClInclude Include="Lib\Geometry\MyVector4.h" />
     <ClInclude Include="Lib\Geometry\MyVertex4.h" />
+    <ClInclude Include="Lib\Geometry\VectorComparison.h" />
+    <ClInclude Include="Lib\MyMath.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

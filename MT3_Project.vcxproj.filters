@@ -44,6 +44,9 @@
     <Filter Include="Lib\3D\PrimitiveDrawer">
       <UniqueIdentifier>{8715c143-fb4f-4f20-a948-f88c4f9b34c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\3D\Collider">
+      <UniqueIdentifier>{78d78a47-1832-4294-89f5-a6ae1987e88e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -97,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="Lib\Geometry\MyVector4.cpp">
       <Filter>Lib\Geometry\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\3D\Collider\Collider.cpp">
+      <Filter>Lib\3D\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\MyMath.cpp">
+      <Filter>Lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +212,15 @@
     </ClInclude>
     <ClInclude Include="Lib\Geometry\MyVector4.h">
       <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Geometry\VectorComparison.h">
+      <Filter>Lib\Geometry\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\3D\Collider\Collider.h">
+      <Filter>Lib\3D\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\MyMath.h">
+      <Filter>Lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

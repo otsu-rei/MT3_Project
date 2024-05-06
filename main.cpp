@@ -2,6 +2,7 @@
 #include <cmath>
 #include <ImGui.h>
 #include <memory>
+#include <format>
 
 // Lib //
 #include "Environment.h"
@@ -15,6 +16,7 @@
 // 3D //
 #include "Camera3D.h"
 #include "PrimitiveDrawer.h"
+#include "Collider.h"
 
 /***********************************
  * メイン関数 *
@@ -30,13 +32,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// camera
 	std::unique_ptr<Camera3D> camera = std::make_unique<Camera3D>();
 
-	// sphere
-	Vector3f center = origin;
-	float radius    = 1.0f;
-
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
+
+	// main
+	Segment segment = { {-2.0f, -1.0f, 0.0f}, {3.0f, 2.0f, 2.0f} };
+	Vector3f point = { -1.5f, 0.6f, 0.6f };
+
+	Vector3f project; 
+	Vector3f closestPoint;
 
 	/***********************************
 	 * ゲームループ *
@@ -56,13 +61,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("sphere")) {
+		ImGui::Separator();
 
-			ImGui::DragFloat3("center", &center.x, 0.01f);
-			ImGui::DragFloat("radius",  &radius,   0.01f);
-
-			ImGui::TreePop();
+		if (ImGui::CollapsingHeader("Segment")) {
+			ImGui::DragFloat3("origin", &segment.origin.x, 0.01f);
+			ImGui::DragFloat3("diff",   &segment.diff.x,   0.01f);
 		}
+
+		if (ImGui::CollapsingHeader("point")) {
+			ImGui::DragFloat3("position", &point.x, 0.01f);
+		}
+
+		project = Project(point - segment.origin, segment.diff);
+		closestPoint = ClosestPoint(point, segment);
+
+		ImGui::Spacing();
+
+		ImGui::Text(
+			"[project] x: %.3f, y: %.3f, z: %.3f",
+			project.x, project.y, project.z
+		);
+
+		ImGui::Text(
+			"[closestPoint] x: %.3f, y: %.3f, z: %.3f",
+			closestPoint.x, closestPoint.y, closestPoint.z
+		);
 
 		ImGui::End();
 
@@ -77,6 +100,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawer->DrawGrid(
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
+		);
+
+		drawer->DrawLine(
+			segment.origin,
+			segment.origin + segment.diff,
+			0xFAFAFAFF
+		);
+
+		drawer->DrawSphere(
+			point, 0.01f, 10,
+			0xFA0000FF
+		);
+
+		drawer->DrawSphere(
+			closestPoint, 0.01f, 10,
+			0x0F0F0FFF
 		);
 
 		///
