@@ -13,6 +13,7 @@
 #include <Novice.h>
 #include <Camera3D.h>
 #include <MyVector2.h>
+#include <Collider.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // PrimitiveDrawer class
@@ -60,7 +61,9 @@ public:
 		uint32_t color
 	);
 
-
+	void DrawPlane(
+		const Plane& plane, uint32_t color
+	);
 
 private:
 

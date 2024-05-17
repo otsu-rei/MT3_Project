@@ -49,6 +49,14 @@ Vector3f Vector::Lerp(const Vector3f& x, const Vector3f& y, float s) {
 	};
 }
 
+Vector3f Vector::Perpendicular(const Vector3f& v) {
+	if (v.x != 0.0f || v.y != 0.0f) {
+		return { -v.y, v.x, 0.0f };
+	}
+
+	return { 0.0f, -v.z, v.y };
+}
+
 Matrix4x4 Matrix::MakeScale(const Vector3f& scale) {
 	return {
 		scale.x, 0.0f, 0.0f, 0.0f,

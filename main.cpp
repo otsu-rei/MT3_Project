@@ -36,15 +36,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	// main
-	Sphere sphere[2];
+	Plane plane = {
+		{0.0f, 1.0f, 0.0f},
+		1.0f
+	};
 
-	for (int i = 0; i < 2; ++i) {
-		sphere[i].radius = 0.5f;
-		sphere[i].center = { i * 1.0f, i * 1.0f, i * 1.0f };
-	}
+	Sphere sphere = {
+		{0.0f, 0.0f, 0.0f},
+		1.0f
+	};
 
-	uint32_t color = 0xFAFAFAFF;
+	uint32_t color;
 
 	/***********************************
 	 * ゲームループ *
@@ -64,26 +66,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		ImGui::Separator();
+		if (ImGui::TreeNode("plane")) {
+			ImGui::DragFloat3("normal", &plane.normal.x, 0.02f);
+			plane.normal = Vector::Normalize(plane.normal);
 
-		for (int i = 0; i < 2; ++i) {
-			std::string label = std::format("sphere[{}]", i);
+			ImGui::DragFloat("distance", &plane.distance, 0.02f);
 
-			if (ImGui::TreeNode(label.c_str())) {
-				ImGui::DragFloat3("center", &sphere[i].center.x, 0.01f);
-				ImGui::DragFloat("radius",  &sphere[i].radius,   0.01f);
-
-				ImGui::TreePop();
-			}
+			ImGui::TreePop();
 		}
 
-		color = 0xFAFAFAFF; //!< default color
-
-		if (Collider::SphereTo(sphere[0], sphere[1])) {
-			color = 0xFA0000FF;
+		if (ImGui::TreeNode("sphere")) {
+			ImGui::DragFloat3("center", &sphere.center.x, 0.02f);
+			ImGui::DragFloat("radius",  &sphere.radius, 0.02f);
+			ImGui::TreePop();
 		}
 
 		ImGui::End();
+
+		color = 0xFAFAFAFF;
+		if (Collider::PlaneToSphere(plane, sphere)) {
+			color = 0xFA0000FF;
+		}
+
+
 
 		///
 		/// ↑更新処理ここまで
@@ -98,12 +103,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		for (int i = 0; i < 2; ++i) {
-			drawer->DrawSphere(
-				sphere[i].center, sphere[i].radius,
-				16, color
-			);
-		}
+		drawer->DrawPlane(
+			plane, 0xFAFAFAFF
+		);
+
+		drawer->DrawSphere(
+			sphere.center, sphere.radius, 16, color
+		);
 
 		///
 		/// ↑描画処理ここまで

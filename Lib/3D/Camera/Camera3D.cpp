@@ -51,8 +51,6 @@ void Camera3D::SetOnImGui() {
 			ImGui::DragFloat("lat", &control_.lat, 0.02f);
 			ImGui::DragFloat("distance", &control_.distance, 0.02f);
 
-			UpdateControl();
-
 		} else {
 			ImGui::DragFloat3("scale", &transform_.scale.x, 0.02f);
 			ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.02f);
@@ -60,6 +58,10 @@ void Camera3D::SetOnImGui() {
 		}
 
 		ImGui::TreePop();
+	}
+
+	if (isUseControl_) {
+		UpdateControl();
 	}
 
 	UpdateMatrix();

@@ -23,6 +23,8 @@ namespace Vector {
 
 	Vector3f Lerp(const Vector3f& x, const Vector3f& y, float s);
 
+	Vector3f Perpendicular(const Vector3f& v);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

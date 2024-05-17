@@ -110,7 +110,7 @@ void PrimitiveDrawer::DrawSphere(
 	const Vector3f& center, float radius, const uint32_t kSubdivision, uint32_t color) {
 
 
-	const float kLatEvery = (std::numbers::pi_v<float> * 2.0f) / static_cast<float>(kSubdivision); // horizontal
+	const float kLatEvery = (std::numbers::pi_v<float> *2.0f) / static_cast<float>(kSubdivision); // horizontal
 	const float kLonEvery = std::numbers::pi_v<float> / static_cast<float>(kSubdivision); // vertical
 
 	enum PointName {
@@ -149,13 +149,36 @@ void PrimitiveDrawer::DrawSphere(
 	}
 }
 
+void PrimitiveDrawer::DrawPlane(const Plane& plane, uint32_t color) {
+	Vector3f center = plane.normal * plane.distance;
+
+	Vector3f perpendiculars[4];
+	perpendiculars[0] = Vector::Normalize(Vector::Perpendicular(plane.normal));
+	perpendiculars[1] = Vector::Cross(plane.normal, perpendiculars[0]);
+	perpendiculars[2] = perpendiculars[0] * -1.0f;
+	perpendiculars[3] = perpendiculars[1] * -1.0f;
+
+	Vector3f points[4];
+	for (int i = 0; i < 4; ++i) {
+		Vector3f extend = perpendiculars[i] * 2.0f;
+		points[i] = center + extend;
+	}
+
+	for (int i = 0; i < 4; ++i) {
+		DrawLine(
+			points[i], points[(i + 1) % 4], color
+		);
+	}
+
+}
+
 //=========================================================================================
 // private
 //=========================================================================================
 
 Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& worldPos) {
 	Vector3f result;
-	
+
 	Matrix4x4 wvpMatrix = Matrix4x4::MakeIdentity() * camera_->GetViewProjMatrix();
 	Vector3f ndcVector = Matrix::Transform(worldPos, wvpMatrix);
 	result = Matrix::Transform(ndcVector, camera_->GetViewportMatrix());

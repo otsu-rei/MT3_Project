@@ -34,3 +34,15 @@ bool Collider::SphereTo(const Sphere& a, const Sphere& b) {
 
 	return false;
 }
+
+bool Collider::PlaneToSphere(const Plane& a, const Sphere& b) {
+
+	Vector3f center = b.center - (a.normal * a.distance);
+	float distance = Vector::Length(center);
+
+	if (distance <= b.radius) {
+		return true;
+	}
+
+	return false;
+}
