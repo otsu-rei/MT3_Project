@@ -35,14 +35,40 @@ bool Collider::SphereTo(const Sphere& a, const Sphere& b) {
 	return false;
 }
 
-bool Collider::PlaneToSphere(const Plane& a, const Sphere& b) {
+bool Collider::PlaneToSphere(const Plane& plane, const Sphere& sphere) {
 
-	Vector3f center = b.center - (a.normal * a.distance);
+	Vector3f center = sphere.center - (plane.normal * plane.distance);
 	float distance = Vector::Length(center);
 
-	if (distance <= b.radius) {
+	if (distance <= sphere.radius) {
 		return true;
 	}
 
 	return false;
+}
+
+bool Collider::PlaneToLine(const Plane& plane, const Line& line) {
+	float dot = Vector::Dot(line.diff, plane.normal);
+
+	if (dot == 0.0f) {
+		return false;
+	}
+
+	return true;
+}
+
+bool Collider::PlaneToSegment(const Plane& plane, const Segment& segment) {
+	float dot = Vector::Dot(segment.diff, plane.normal);
+
+	if (dot == 0.0f) {
+		return false;
+	}
+
+	float t = (plane.distance - Vector::Dot(segment.origin, plane.normal)) / dot;
+
+	if (t < 0.0f || t > 1.0f) {
+		return false; // segment(線分)なのでtが0~1
+	}
+
+	return true;
 }

@@ -41,9 +41,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		1.0f
 	};
 
-	Sphere sphere = {
+	Segment segment = {
 		{0.0f, 0.0f, 0.0f},
-		1.0f
+		{1.0f, 0.0f, 0.0f},
 	};
 
 	uint32_t color;
@@ -67,24 +67,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		camera->SetOnImGui();
 
 		if (ImGui::TreeNode("plane")) {
-			ImGui::DragFloat3("normal", &plane.normal.x, 0.02f);
-			plane.normal = Vector::Normalize(plane.normal);
-
-			ImGui::DragFloat("distance", &plane.distance, 0.02f);
-
+			plane.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("sphere")) {
-			ImGui::DragFloat3("center", &sphere.center.x, 0.02f);
-			ImGui::DragFloat("radius",  &sphere.radius, 0.02f);
+		if (ImGui::TreeNode("segment")) {
+			segment.SetOnImGui();
 			ImGui::TreePop();
 		}
+
+		bool isCollision = Collider::PlaneToSegment(plane, segment);
+		std::string text = std::format("PlaneToSegment: {}", isCollision);
+		ImGui::Text(text.c_str());
 
 		ImGui::End();
 
 		color = 0xFAFAFAFF;
-		if (Collider::PlaneToSphere(plane, sphere)) {
+		if (isCollision) {
 			color = 0xFA0000FF;
 		}
 
@@ -107,8 +106,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			plane, 0xFAFAFAFF
 		);
 
-		drawer->DrawSphere(
-			sphere.center, sphere.radius, 16, color
+		drawer->DrawLine(
+			segment.origin, segment.origin + segment.diff, color
 		);
 
 		///
