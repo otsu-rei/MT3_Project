@@ -37,8 +37,8 @@ bool Collider::SphereTo(const Sphere& a, const Sphere& b) {
 
 bool Collider::PlaneToSphere(const Plane& plane, const Sphere& sphere) {
 
-	Vector3f center = sphere.center - (plane.normal * plane.distance);
-	float distance = Vector::Length(center);
+	float distance = Vector::Dot(plane.normal, sphere.center) - plane.distance;
+	distance = distance < 0.0f ? -distance : distance; // 絶対値
 
 	if (distance <= sphere.radius) {
 		return true;
