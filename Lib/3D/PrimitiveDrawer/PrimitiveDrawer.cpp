@@ -55,6 +55,27 @@ void PrimitiveDrawer::DrawTriangle(
 
 }
 
+void PrimitiveDrawer::DrawTriangle(
+	const Vector3f& w1, const Vector3f& w2, const Vector3f& w3,
+	uint32_t color, FillMode fillMode) {
+
+	Vector2f pos[3];
+	pos[0] = ChangeScreenPos(w1);
+	pos[1] = ChangeScreenPos(w2);
+	pos[2] = ChangeScreenPos(w3);
+
+	Novice::DrawTriangle(
+		static_cast<int>(pos[0].x),
+		static_cast<int>(pos[0].y),
+		static_cast<int>(pos[1].x),
+		static_cast<int>(pos[1].y),
+		static_cast<int>(pos[2].x),
+		static_cast<int>(pos[2].y),
+		color,
+		fillMode
+	);
+}
+
 void PrimitiveDrawer::DrawTriangleCalling(
 	const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
 	const Matrix4x4& worldMatrix,

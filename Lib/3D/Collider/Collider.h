@@ -43,6 +43,16 @@ struct Plane {
 	}
 };
 
+struct Triangle {
+	Vector3f virtices[3];
+
+	void SetOnImGui() {
+		ImGui::DragFloat3("virtices[0]", &virtices[0].x, 0.02f);
+		ImGui::DragFloat3("virtices[1]", &virtices[1].x, 0.02f);
+		ImGui::DragFloat3("virtices[2]", &virtices[2].x, 0.02f);
+	}
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // using
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +75,7 @@ namespace Collider {
 	bool PlaneToSphere(const Plane& plane, const Sphere& sphere);
 	bool PlaneToLine(const Plane& plane, const Line& line);
 	bool PlaneToSegment(const Plane& plane, const Segment& segment);
+	bool SegmentToTriangle(const Segment& segment, const Triangle& triangle);
 
 }
 

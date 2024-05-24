@@ -72,3 +72,37 @@ bool Collider::PlaneToSegment(const Plane& plane, const Segment& segment) {
 
 	return true;
 }
+
+bool Collider::SegmentToTriangle(const Segment& segment, const Triangle& triangle) {
+
+	Vector3f n = Vector::Cross(triangle.virtices[1] - triangle.virtices[0], triangle.virtices[2] - triangle.virtices[1]);
+	n = Vector::Normalize(n);
+
+	float dot = Vector::Dot(segment.diff, n);
+
+	if (dot == 0.0f) {
+		return false; // 平行なので
+	}
+
+	float d = Vector::Dot(triangle.virtices[0], n);
+	d = d < 0.0f ? d * -1 : d;
+
+	float t = d - Vector::Dot(segment.origin, n) / dot;
+
+	if (t < 0.0f || t > 1.0f) {
+		return false; // segment(線分)なのでtが0~1
+	}
+
+	Vector3f p = segment.origin + segment.diff * t;
+
+	for (int i = 0; i < 3; ++i) {
+		int next = (i + 1) % 3;
+		Vector3f cross = Vector::Cross(triangle.virtices[next] - triangle.virtices[i], p - triangle.virtices[next]);
+
+		if (Vector::Dot(cross, n) < 0.0f) {
+			return false;
+		}
+	}
+
+	return true;
+}

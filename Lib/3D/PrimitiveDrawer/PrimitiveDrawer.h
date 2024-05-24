@@ -44,6 +44,11 @@ public:
 		uint32_t color, FillMode fillMode = kFillModeSolid
 	);
 
+	void DrawTriangle(
+		const Vector3f& w1, const Vector3f& w2, const Vector3f& w3,
+		uint32_t color, FillMode fillMode = kFillModeWireFrame
+	);
+
 	void DrawTriangleCalling(
 		const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
 		const Matrix4x4& worldMatrix,
