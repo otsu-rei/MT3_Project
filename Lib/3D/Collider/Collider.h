@@ -6,6 +6,7 @@
 #include <MyVector3.h>
 #include <MyMath.h>
 #include <imgui.h>
+#include <VectorComparison.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Object Structure
@@ -50,6 +51,26 @@ struct Triangle {
 		ImGui::DragFloat3("virtices[0]", &virtices[0].x, 0.02f);
 		ImGui::DragFloat3("virtices[1]", &virtices[1].x, 0.02f);
 		ImGui::DragFloat3("virtices[2]", &virtices[2].x, 0.02f);
+	}
+};
+
+struct AABB {
+	Vector3f min;
+	Vector3f max;
+
+	void SetOnImGui() {
+		ImGui::DragFloat3("min", &min.x, 0.02f);
+		ImGui::DragFloat3("max", &max.x, 0.02f);
+
+		// clamps
+		min.x = (std::min)(min.x, max.x);
+		max.x = (std::max)(min.x, max.x);
+
+		min.y = (std::min)(min.y, max.y);
+		max.y = (std::max)(min.y, max.y);
+
+		min.z = (std::min)(min.z, max.z);
+		max.z = (std::max)(min.z, max.z);
 	}
 };
 

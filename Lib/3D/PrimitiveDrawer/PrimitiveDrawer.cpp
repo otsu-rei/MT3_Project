@@ -193,6 +193,37 @@ void PrimitiveDrawer::DrawPlane(const Plane& plane, uint32_t color) {
 
 }
 
+void PrimitiveDrawer::DrawAABB(const AABB& aabb, uint32_t color) {
+	Vector3f pos[8];
+
+	// A
+	for (int i = 0; i < 4; ++i) {
+		pos[i] = aabb.min;
+	}
+
+	pos[1].z = aabb.max.z;
+	pos[2].y = aabb.max.y;
+	pos[2].z = aabb.max.z;
+	pos[3].y = aabb.max.y;
+
+	// B
+	for (int i = 4; i < 8; ++i) {
+		pos[i] = aabb.max;
+	}
+
+	pos[4].y = aabb.min.y;
+	pos[4].z = aabb.min.z;
+	pos[5].y = aabb.min.y;
+	pos[7].z = aabb.min.z;
+
+	for (int i = 0; i < 4; ++i) {
+		int next = (i + 1) % 4;
+		DrawLine(pos[i], pos[next], color);
+		DrawLine(pos[i + 4], pos[next + 4], color);
+		DrawLine(pos[i], pos[i + 4], color);
+	}
+}
+
 //=========================================================================================
 // private
 //=========================================================================================

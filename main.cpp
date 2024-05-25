@@ -36,17 +36,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Segment segment = {
-		{0.0f, 0.0f, 0.0f},
-		{1.0f, 0.0f, 0.0f},
+	AABB aabb1 = {
+		.min = { -0.5f, -0.5f, -0.5f },
+		.max = { 0.0f, 0.0f, 0.0f },
 	};
 
-	Triangle triangle = {
-		{
-			-1.0f, 0.0f, 0.0f, // v1
-			0.0f, 1.0f, 0.0f, // v2
-			1.0f, 0.0f, 0.0f, // v3
-		}
+	AABB aabb2 = {
+		.min = {0.2f, 0.2f, 0.2f},
+		.max = {1.0f, 1.0f, 1.0f},
 	};
 
 	/***********************************
@@ -67,27 +64,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("Segment")) {
-			segment.SetOnImGui();
+		if (ImGui::TreeNode("AABB1")) {
+			aabb1.SetOnImGui();
 			ImGui::TreePop();
 		}
-
-		if (ImGui::TreeNode("Triangle")) {
-			triangle.SetOnImGui();
-			ImGui::TreePop();
-		}
-
-		bool isCollision = Collider::SegmentToTriangle(segment, triangle);
-		std::string text = std::format("isCollision: {}", isCollision);
-
-		ImGui::Text(text.c_str());
 
 		ImGui::End();
-
-		uint32_t color = 0xFAFAFAFF;
-		if (isCollision) {
-			color = 0xFA0000FF;
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -102,13 +84,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawLine(
-			segment.origin, segment.origin + segment.diff, color
+		drawer->DrawAABB(
+			aabb1, 0xFAFAFAFF
 		);
 
-		drawer->DrawTriangle(
-			triangle.virtices[0], triangle.virtices[1], triangle.virtices[2],
-			0xFAFAFAFF
+		drawer->DrawAABB(
+			aabb2, 0xFAFAFAFF
 		);
 
 		///

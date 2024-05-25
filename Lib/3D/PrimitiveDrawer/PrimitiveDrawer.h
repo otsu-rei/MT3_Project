@@ -70,6 +70,10 @@ public:
 		const Plane& plane, uint32_t color
 	);
 
+	void DrawAABB(
+		const AABB& aabb, uint32_t color
+	);
+
 private:
 
 	//=========================================================================================
