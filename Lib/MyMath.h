@@ -25,6 +25,8 @@ namespace Vector {
 
 	Vector3f Perpendicular(const Vector3f& v);
 
+	Vector3f Clamp(const Vector3f& v, const Vector3f& min, const Vector3f& max);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,6 +4,7 @@
 // include
 //-----------------------------------------------------------------------------------------
 #include <cmath>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Vector namespace
@@ -55,6 +56,14 @@ Vector3f Vector::Perpendicular(const Vector3f& v) {
 	}
 
 	return { 0.0f, -v.z, v.y };
+}
+
+Vector3f Vector::Clamp(const Vector3f& v, const Vector3f& min, const Vector3f& max) {
+	return {
+		.x = std::clamp(v.x, min.x, max.x),
+		.y = std::clamp(v.y, min.y, max.y),
+		.z = std::clamp(v.z, min.z, max.z),
+	};
 }
 
 Matrix4x4 Matrix::MakeScale(const Vector3f& scale) {

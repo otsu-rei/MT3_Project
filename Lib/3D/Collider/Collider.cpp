@@ -114,3 +114,16 @@ bool Collider::AABBTo(const AABB& a, const AABB& b) {
 
 	return false;
 }
+
+bool Collider::AABBToSphere(const AABB& aabb, const Sphere& sphere) {
+	
+	Vector3f closestPoint = Vector::Clamp(sphere.center, aabb.min, aabb.max);
+
+	float distance = Vector::Length(closestPoint - sphere.center);
+
+	if (distance <= sphere.radius) {
+		return true;
+	}
+
+	return false;
+}

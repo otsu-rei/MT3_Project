@@ -36,14 +36,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	AABB aabb1 = {
+	AABB aabb = {
 		.min = { -0.5f, -0.5f, -0.5f },
 		.max = { 0.0f, 0.0f, 0.0f },
 	};
 
-	AABB aabb2 = {
-		.min = {0.2f, 0.2f, 0.2f},
-		.max = {1.0f, 1.0f, 1.0f},
+	Sphere sphere = {
+		.center = {0.0f, 0.5f, 1.0f},
+		.radius = 0.5f
 	};
 
 	/***********************************
@@ -64,21 +64,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("AABB1")) {
-			aabb1.SetOnImGui();
+		if (ImGui::TreeNode("AABB")) {
+			aabb.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("AABB2")) {
-			aabb2.SetOnImGui();
+		if (ImGui::TreeNode("Sphere")) {
+			sphere.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		bool isCollision = false;
-
-		if (Collider::AABBTo(aabb1, aabb2)) {
-			isCollision = true;
-		}
+		bool isCollision = Collider::AABBToSphere(aabb, sphere);
 
 		std::string text = std::format("isCollision: {}", isCollision);
 		ImGui::Text(text.c_str());
@@ -92,7 +88,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		
+
 		uint32_t color = 0xFAFAFAFF;
 		if (isCollision) {
 			color = 0xFA0000FF;
@@ -104,11 +100,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		);
 
 		drawer->DrawAABB(
-			aabb1, color
+			aabb, color
 		);
 
-		drawer->DrawAABB(
-			aabb2, color
+		drawer->DrawSphere(
+			sphere.center, sphere.radius, 16,
+			color
 		);
 
 		///
