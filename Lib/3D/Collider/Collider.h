@@ -97,6 +97,7 @@ namespace Collider {
 	bool PlaneToLine(const Plane& plane, const Line& line);
 	bool PlaneToSegment(const Plane& plane, const Segment& segment);
 	bool SegmentToTriangle(const Segment& segment, const Triangle& triangle);
+	bool AABBTo(const AABB& a, const AABB& b);
 
 }
 

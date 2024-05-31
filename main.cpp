@@ -69,6 +69,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 
+		if (ImGui::TreeNode("AABB2")) {
+			aabb2.SetOnImGui();
+			ImGui::TreePop();
+		}
+
+		bool isCollision = false;
+
+		if (Collider::AABBTo(aabb1, aabb2)) {
+			isCollision = true;
+		}
+
+		std::string text = std::format("isCollision: {}", isCollision);
+		ImGui::Text(text.c_str());
+
 		ImGui::End();
 
 		///
@@ -79,17 +93,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 		
+		uint32_t color = 0xFAFAFAFF;
+		if (isCollision) {
+			color = 0xFA0000FF;
+		}
+
 		drawer->DrawGrid(
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
 		);
 
 		drawer->DrawAABB(
-			aabb1, 0xFAFAFAFF
+			aabb1, color
 		);
 
 		drawer->DrawAABB(
-			aabb2, 0xFAFAFAFF
+			aabb2, color
 		);
 
 		///

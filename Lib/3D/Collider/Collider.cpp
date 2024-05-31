@@ -106,3 +106,11 @@ bool Collider::SegmentToTriangle(const Segment& segment, const Triangle& triangl
 
 	return true;
 }
+
+bool Collider::AABBTo(const AABB& a, const AABB& b) {
+	if (All(a.min <= b.max) && All(a.max >= b.min)) {
+		return true;
+	}
+
+	return false;
+}
