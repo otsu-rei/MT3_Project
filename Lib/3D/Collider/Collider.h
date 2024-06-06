@@ -99,6 +99,7 @@ namespace Collider {
 	bool SegmentToTriangle(const Segment& segment, const Triangle& triangle);
 	bool AABBTo(const AABB& a, const AABB& b);
 	bool AABBToSphere(const AABB& aabb, const Sphere& sphere);
+	bool AABBToSegment(const AABB& aabb, const Segment& segment);
 
 }
 

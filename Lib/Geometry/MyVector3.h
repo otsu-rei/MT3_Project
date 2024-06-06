@@ -53,6 +53,11 @@ public:
 		z *= scalar;
 	}
 
+	/* divistion */
+	Vector3 operator/(const Vector3& other) const {
+		return { x / other.x, y / other.y, z / other.z };
+	}
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////

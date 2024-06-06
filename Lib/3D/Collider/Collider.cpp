@@ -127,3 +127,38 @@ bool Collider::AABBToSphere(const AABB& aabb, const Sphere& sphere) {
 
 	return false;
 }
+
+bool Collider::AABBToSegment(const AABB& aabb, const Segment& segment) {
+
+	Vector3f tmin = (aabb.min - segment.origin) / segment.diff; // aabbのminのt
+	Vector3f tmax = (aabb.max - segment.origin) / segment.diff; // aabbのmaxのt
+
+	/*if (std::isnan(tmin) || std::isnan(tmax)) { // NaN 
+		return false;
+	}*/
+
+	Vector3f near = {
+		std::min(tmin.x, tmax.x),
+		std::min(tmin.y, tmax.y),
+		std::min(tmin.z, tmax.z),
+	};
+
+	Vector3f far = {
+		std::max(tmin.x, tmax.x),
+		std::max(tmin.y, tmax.y),
+		std::max(tmin.z, tmax.z),
+	};
+
+	float min = std::max(std::max(near.x, near.y), near.z);
+	float max = std::min(std::min(far.x, far.y), far.z);
+
+	if (max < 0.0f || min > 1.0f) {
+		return false; //!< segmentなので
+	}
+
+	if (min <= max) {
+		return true;
+	}
+
+	return false;
+}

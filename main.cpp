@@ -41,9 +41,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		.max = { 0.0f, 0.0f, 0.0f },
 	};
 
-	Sphere sphere = {
-		.center = {0.0f, 0.5f, 1.0f},
-		.radius = 0.5f
+	Segment segment = {
+		.origin = { 0.0f, 0.5f, 0.0f },
+		.diff = {1.0f, 1.0f, 0.0f}
 	};
 
 	/***********************************
@@ -69,17 +69,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Sphere")) {
-			sphere.SetOnImGui();
+		if (ImGui::TreeNode("Segment")) {
+			segment.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		bool isCollision = Collider::AABBToSphere(aabb, sphere);
+		bool isCollision = Collider::AABBToSegment(aabb, segment);
 
 		std::string text = std::format("isCollision: {}", isCollision);
 		ImGui::Text(text.c_str());
 
 		ImGui::End();
+
+		uint32_t color = 0xFAFAFAFF;
+
+		if (isCollision) {
+			color = 0xFA0000FF;
+		}
 
 		///
 		/// ↑更新処理ここまで
@@ -88,11 +94,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-
-		uint32_t color = 0xFAFAFAFF;
-		if (isCollision) {
-			color = 0xFA0000FF;
-		}
 
 		drawer->DrawGrid(
 			{0.0f, 0.0f, 0.0f},
@@ -103,9 +104,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			aabb, color
 		);
 
-		drawer->DrawSphere(
-			sphere.center, sphere.radius, 16,
-			color
+		drawer->DrawLine(
+			segment.origin, segment.origin + segment.diff,
+			0xFAFAFAFF
 		);
 
 		///
