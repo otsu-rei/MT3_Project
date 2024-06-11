@@ -133,9 +133,9 @@ bool Collider::AABBToSegment(const AABB& aabb, const Segment& segment) {
 	Vector3f tmin = (aabb.min - segment.origin) / segment.diff; // aabbのminのt
 	Vector3f tmax = (aabb.max - segment.origin) / segment.diff; // aabbのmaxのt
 
-	if (std::isnan(tmin) || std::isnan(tmax)) { // NaN 
-		return false;
-	}
+	//if (std::isnan(tmin) || std::isnan(tmax)) { // NaN 
+	//	return false;
+	//}
 
 	Vector3f near = {
 		std::min(tmin.x, tmax.x),
