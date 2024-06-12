@@ -32,6 +32,22 @@ void PrimitiveDrawer::DrawLine(
 
 }
 
+void PrimitiveDrawer::DrawLine(
+	const Vector3f& l1, const Vector3f& l2, const Matrix4x4& worldMatrix, uint32_t color) {
+
+	Vector2f pos[2];
+	pos[0] = ChangeScreenPos(l1, worldMatrix);
+	pos[1] = ChangeScreenPos(l2, worldMatrix);
+
+	Novice::DrawLine(
+		static_cast<int>(pos[0].x),
+		static_cast<int>(pos[0].y),
+		static_cast<int>(pos[1].x),
+		static_cast<int>(pos[1].y),
+		color
+	);
+}
+
 void PrimitiveDrawer::DrawTriangle(
 	const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
 	const Matrix4x4& worldMatrix,
@@ -224,25 +240,46 @@ void PrimitiveDrawer::DrawAABB(const AABB& aabb, uint32_t color) {
 	}
 }
 
+void PrimitiveDrawer::DrawOBB(
+	const OBB& obb, uint32_t color) {
+
+	Vector3f pos[8];
+
+	// sizeのみの座標に設定
+	pos[0] = { -obb.size.x, obb.size.y, -obb.size.z };
+	pos[4] = { -obb.size.x, obb.size.y, obb.size.z };
+
+	pos[1] = { -obb.size.x, -obb.size.y, -obb.size.z };
+	pos[5] = { -obb.size.x, -obb.size.y, obb.size.z };
+
+	pos[2] = { obb.size.x, -obb.size.y, -obb.size.z };
+	pos[6] = { obb.size.x, -obb.size.y, obb.size.z };
+
+	pos[3] = { obb.size.x, obb.size.y, -obb.size.z };
+	pos[7] = { obb.size.x, obb.size.y, obb.size.z };
+
+	for (int i = 0; i < 8; ++i) {
+		pos[i] = Matrix::Transform(pos[i], obb.orientation * Matrix::MakeTranslate(obb.center)); //!< 姿勢行列 + centerの適用
+	}
+
+	for (int i = 0; i < 4; ++i) {
+		int next = (i + 1) % 4;
+		DrawLine(pos[i], pos[next], color);
+		DrawLine(pos[i + 4], pos[next + 4], color);
+		DrawLine(pos[i], pos[i + 4], color);
+	}
+
+}
+
 //=========================================================================================
 // private
 //=========================================================================================
 
-Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& worldPos) {
-	Vector3f result;
-
-	Matrix4x4 wvpMatrix = Matrix4x4::MakeIdentity() * camera_->GetViewProjMatrix();
-	Vector3f ndcVector = Matrix::Transform(worldPos, wvpMatrix);
-	result = Matrix::Transform(ndcVector, camera_->GetViewportMatrix());
-
-	return { result.x, result.y };
-}
-
-Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix) {
+Vector2f PrimitiveDrawer::ChangeScreenPos(const Vector3f& pos, const Matrix4x4& worldMatrix) {
 	Vector3f result;
 
 	Matrix4x4 wvpMatrix = worldMatrix * camera_->GetViewProjMatrix();
-	Vector3f ndcVector = Matrix::Transform(loaclPos, wvpMatrix);
+	Vector3f ndcVector = Matrix::Transform(pos, wvpMatrix);
 	result = Matrix::Transform(ndcVector, camera_->GetViewportMatrix());
 
 	return { result.x, result.y };

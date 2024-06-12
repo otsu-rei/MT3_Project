@@ -38,6 +38,10 @@ public:
 		const Vector3f& w1, const Vector3f& w2, uint32_t color
 	);
 
+	void DrawLine(
+		const Vector3f& l1, const Vector3f& l2, const Matrix4x4& worldMatrix, uint32_t color
+	);
+
 	void DrawTriangle(
 		const Vector3f& l1, const Vector3f& l2, const Vector3f& l3,
 		const Matrix4x4& worldMatrix,
@@ -74,6 +78,10 @@ public:
 		const AABB& aabb, uint32_t color
 	);
 
+	void DrawOBB(
+		const OBB& obb, uint32_t color
+	);
+
 private:
 
 	//=========================================================================================
@@ -86,7 +94,6 @@ private:
 	// private methods
 	//=========================================================================================
 
-	Vector2f ChangeScreenPos(const Vector3f& worldPos);
-	Vector2f ChangeScreenPos(const Vector3f& loaclPos, const Matrix4x4& worldMatrix);
+	Vector2f ChangeScreenPos(const Vector3f& pos, const Matrix4x4& worldMatrix = Matrix4x4::MakeIdentity());
 
 };

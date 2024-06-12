@@ -66,6 +66,14 @@ Vector3f Vector::Clamp(const Vector3f& v, const Vector3f& min, const Vector3f& m
 	};
 }
 
+Vector3f Vector::Max(const Vector3f& a, const Vector3f& b) {
+	return {
+		.x = std::max(a.x, b.x),
+		.y = std::max(a.y, b.y),
+		.z = std::max(a.z, b.z),
+	};
+}
+
 Matrix4x4 Matrix::MakeScale(const Vector3f& scale) {
 	return {
 		scale.x, 0.0f, 0.0f, 0.0f,

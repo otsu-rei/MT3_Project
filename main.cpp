@@ -36,14 +36,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	AABB aabb = {
-		.min = { -0.5f, -0.5f, -0.5f },
-		.max = { 0.0f, 0.0f, 0.0f },
+	OBB obb = {
+		{ -1.0f, 0.0f, 0.0f },
+		Matrix4x4::MakeIdentity(),
+		{ 0.5f, 0.5f, 0.5f }
 	};
 
-	Segment segment = {
-		.origin = { 0.0f, 0.5f, 0.0f },
-		.diff = {1.0f, 1.0f, 0.0f}
+	Sphere sphere = {
+		.center = { 0.0f, 0.0f, 0.0f },
+		.radius = 0.5f
 	};
 
 	/***********************************
@@ -64,19 +65,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("AABB")) {
-			aabb.SetOnImGui();
+		if (ImGui::TreeNode("OBB")) {
+			obb.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Segment")) {
-			segment.SetOnImGui();
+		if (ImGui::TreeNode("Sphere")) {
+			sphere.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		bool isCollision = Collider::AABBToSegment(aabb, segment);
-
+		bool isCollision = Collider::OBBToSphere(obb, sphere);
 		std::string text = std::format("isCollision: {}", isCollision);
+
 		ImGui::Text(text.c_str());
 
 		ImGui::End();
@@ -100,13 +101,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawAABB(
-			aabb, color
+		drawer->DrawOBB(
+			obb, color
 		);
 
-		drawer->DrawLine(
-			segment.origin, segment.origin + segment.diff,
-			0xFAFAFAFF
+		drawer->DrawSphere(
+			sphere.center, sphere.radius, 16, 0xFAFAFAFF
 		);
 
 		///

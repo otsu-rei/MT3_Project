@@ -162,3 +162,21 @@ bool Collider::AABBToSegment(const AABB& aabb, const Segment& segment) {
 
 	return false;
 }
+
+bool Collider::OBBToSphere(const OBB& obb, const Sphere& sphere) {
+	
+	Vector3f centerInOBBLocal = Matrix::Transform(sphere.center, Matrix::Inverse(obb.orientation * Matrix::MakeTranslate(obb.center)));
+
+	AABB aabbInOBBLocal = {
+		.min = obb.size * -1,
+		.max = obb.size,
+	};
+
+	Sphere sphereInOBBLocal = {
+		.center = centerInOBBLocal,
+		.radius = sphere.radius
+	};
+
+	return AABBToSphere(aabbInOBBLocal, sphereInOBBLocal);
+
+}

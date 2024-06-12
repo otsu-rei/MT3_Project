@@ -27,6 +27,8 @@ namespace Vector {
 
 	Vector3f Clamp(const Vector3f& v, const Vector3f& min, const Vector3f& max);
 
+	Vector3f Max(const Vector3f& a, const Vector3f& b);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

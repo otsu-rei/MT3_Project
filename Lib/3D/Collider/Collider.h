@@ -74,6 +74,24 @@ struct AABB {
 	}
 };
 
+struct OBB {
+	Vector3f  center;
+	Matrix4x4 orientation = Matrix4x4::MakeIdentity(); //!< 回転行列のみ
+	Vector3f  size;
+
+	void SetOnImGui() {
+		ImGui::DragFloat3("center", &center.x, 0.02f);
+		ImGui::DragFloat3("rotate", &rotate.x, 0.02f);
+		ImGui::DragFloat3("size", &size.x, 0.02f);
+
+		orientation = Matrix::MakeRotate(rotate);
+		size        = Vector::Max({ 0.0f }, size);
+	}
+
+	Vector3f rotate = { 0.0f }; //!< ImGui関数で使う
+
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // using
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +118,7 @@ namespace Collider {
 	bool AABBTo(const AABB& a, const AABB& b);
 	bool AABBToSphere(const AABB& aabb, const Sphere& sphere);
 	bool AABBToSegment(const AABB& aabb, const Segment& segment);
+	bool OBBToSphere(const OBB& obb, const Sphere& sphere);
 
 }
 
