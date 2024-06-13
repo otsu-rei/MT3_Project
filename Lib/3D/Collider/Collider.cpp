@@ -133,9 +133,9 @@ bool Collider::AABBToSegment(const AABB& aabb, const Segment& segment) {
 	Vector3f tmin = (aabb.min - segment.origin) / segment.diff; // aabbのminのt
 	Vector3f tmax = (aabb.max - segment.origin) / segment.diff; // aabbのmaxのt
 
-	//if (std::isnan(tmin) || std::isnan(tmax)) { // NaN 
-	//	return false;
-	//}
+	if (Vector::IsNun(tmin) || Vector::IsNun(tmax)) { // NaN 
+		return false;
+	}
 
 	Vector3f near = {
 		std::min(tmin.x, tmax.x),
@@ -163,12 +163,81 @@ bool Collider::AABBToSegment(const AABB& aabb, const Segment& segment) {
 	return false;
 }
 
+bool Collider::AABBToRay(const AABB& aabb, const Ray& ray) {
+
+	Vector3f tmin = (aabb.min - ray.origin) / ray.diff; // aabbのminのt
+	Vector3f tmax = (aabb.max - ray.origin) / ray.diff; // aabbのmaxのt
+
+	if (Vector::IsNun(tmin) || Vector::IsNun(tmax)) { // NaN 
+		return false;
+	}
+
+	Vector3f near = {
+		std::min(tmin.x, tmax.x),
+		std::min(tmin.y, tmax.y),
+		std::min(tmin.z, tmax.z),
+	};
+
+	Vector3f far = {
+		std::max(tmin.x, tmax.x),
+		std::max(tmin.y, tmax.y),
+		std::max(tmin.z, tmax.z),
+	};
+
+	float min = std::max(std::max(near.x, near.y), near.z);
+	float max = std::min(std::min(far.x, far.y), far.z);
+
+	if (max < 0.0f) {
+		return false; //!< rayなので
+	}
+
+	if (min <= max) {
+		return true;
+	}
+
+	return false;
+	
+}
+
+bool Collider::AABBToLine(const AABB& aabb, const Line& line) {
+
+	Vector3f tmin = (aabb.min - line.origin) / line.diff; // aabbのminのt
+	Vector3f tmax = (aabb.max - line.origin) / line.diff; // aabbのmaxのt
+
+	if (Vector::IsNun(tmin) || Vector::IsNun(tmax)) { // NaN 
+		return false;
+	}
+
+	Vector3f near = {
+		std::min(tmin.x, tmax.x),
+		std::min(tmin.y, tmax.y),
+		std::min(tmin.z, tmax.z),
+	};
+
+	Vector3f far = {
+		std::max(tmin.x, tmax.x),
+		std::max(tmin.y, tmax.y),
+		std::max(tmin.z, tmax.z),
+	};
+
+	float min = std::max(std::max(near.x, near.y), near.z);
+	float max = std::min(std::min(far.x, far.y), far.z);
+
+	//!< lineなので例外なし
+
+	if (min <= max) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Collider::OBBToSphere(const OBB& obb, const Sphere& sphere) {
 	
 	Vector3f centerInOBBLocal = Matrix::Transform(sphere.center, Matrix::Inverse(obb.orientation * Matrix::MakeTranslate(obb.center)));
 
 	AABB aabbInOBBLocal = {
-		.min = obb.size * -1,
+		.min = -obb.size,
 		.max = obb.size,
 	};
 
@@ -179,4 +248,43 @@ bool Collider::OBBToSphere(const OBB& obb, const Sphere& sphere) {
 
 	return AABBToSphere(aabbInOBBLocal, sphereInOBBLocal);
 
+}
+
+bool Collider::OBBToSegment(const OBB& obb, const Segment& segment) {
+	
+	Matrix4x4 obbWorldInverse = Matrix::Inverse(obb.orientation * Matrix::MakeTranslate(obb.center));
+
+	Vector3f obbLocalOrigin = Matrix::Transform(segment.origin, obbWorldInverse);
+	Vector3f obbLocalEnd    = Matrix::Transform(segment.origin + segment.diff, obbWorldInverse);
+
+	AABB obbLocalAABB = {
+		.min = -obb.size,
+		.max = obb.size,
+	};
+
+	Segment obbLocalSegment = {
+		.origin = obbLocalOrigin,
+		.diff   = obbLocalEnd - obbLocalOrigin
+	};
+
+	return AABBToSegment(obbLocalAABB, obbLocalSegment);
+}
+
+bool Collider::OBBToRay(const OBB& obb, const Ray& ray) {
+	Matrix4x4 obbWorldInverse = Matrix::Inverse(obb.orientation * Matrix::MakeTranslate(obb.center));
+
+	Vector3f obbLocalOrigin = Matrix::Transform(ray.origin, obbWorldInverse);
+	Vector3f obbLocalEnd    = Matrix::Transform(ray.origin + ray.diff, obbWorldInverse);
+
+	AABB obbLocalAABB = {
+		.min = -obb.size,
+		.max = obb.size,
+	};
+
+	Ray obbLocalRay = {
+		.origin = obbLocalOrigin,
+		.diff   = obbLocalEnd - obbLocalOrigin
+	};
+
+	return AABBToRay(obbLocalAABB, obbLocalRay);
 }

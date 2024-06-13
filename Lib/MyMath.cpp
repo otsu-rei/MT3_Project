@@ -74,6 +74,16 @@ Vector3f Vector::Max(const Vector3f& a, const Vector3f& b) {
 	};
 }
 
+bool Vector::IsNun(const Vector3f& v) {
+	Flag3 flag = {
+		std::isnan(v.x),
+		std::isnan(v.y),
+		std::isnan(v.z),
+	};
+
+	return Any(flag);
+}
+
 Matrix4x4 Matrix::MakeScale(const Vector3f& scale) {
 	return {
 		scale.x, 0.0f, 0.0f, 0.0f,

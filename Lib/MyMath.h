@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------------------
 #include <MyVector3.h>
 #include <MyMatrix4x4.h>
+#include <VectorComparison.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Vector namespace
@@ -28,6 +29,8 @@ namespace Vector {
 	Vector3f Clamp(const Vector3f& v, const Vector3f& min, const Vector3f& max);
 
 	Vector3f Max(const Vector3f& a, const Vector3f& b);
+
+	bool IsNun(const Vector3f& v);
 
 }
 
