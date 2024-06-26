@@ -123,6 +123,7 @@ namespace Collider {
 	bool OBBToSphere(const OBB& obb, const Sphere& sphere);
 	bool OBBToSegment(const OBB& obb, const Segment& segment);
 	bool OBBToRay(const OBB& obb, const Ray& ray);
+	bool OBBToOBB(const OBB& a, const OBB& b);
 
 }
 

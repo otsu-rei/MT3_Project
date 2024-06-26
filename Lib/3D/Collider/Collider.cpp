@@ -1,5 +1,10 @@
 #include "Collider.h"
 
+//-----------------------------------------------------------------------------------------
+// include
+//-----------------------------------------------------------------------------------------
+#include <vector>
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // methods
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,4 +292,61 @@ bool Collider::OBBToRay(const OBB& obb, const Ray& ray) {
 	};
 
 	return AABBToRay(obbLocalAABB, obbLocalRay);
+}
+
+bool Collider::OBBToOBB(const OBB& a, const OBB& b) {
+
+	Vector3f axes[3 + 3 + 9];
+
+	Vector3f obbAxesA[3];
+	Vector3f obbAxesB[3];
+
+	obbAxesA[0] = Matrix::Transform({ 1.0f, 0.0f, 0.0f }, a.orientation);
+	obbAxesA[1] = Matrix::Transform({ 0.0f, 1.0f, 0.0f }, a.orientation);
+	obbAxesA[2] = Matrix::Transform({ 0.0f, 0.0f, 1.0f }, a.orientation);
+
+	obbAxesB[0] = Matrix::Transform({ 1.0f, 0.0f, 0.0f }, b.orientation);
+	obbAxesB[1] = Matrix::Transform({ 0.0f, 1.0f, 0.0f }, b.orientation);
+	obbAxesB[2] = Matrix::Transform({ 0.0f, 0.0f, 1.0f }, b.orientation);
+
+	int k = 0;
+
+	axes[k++] = obbAxesA[0];
+	axes[k++] = obbAxesA[1];
+	axes[k++] = obbAxesA[2];
+
+	axes[k++] = obbAxesB[0];
+	axes[k++] = obbAxesB[1];
+	axes[k++] = obbAxesB[2];
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			axes[k++] = Vector::Cross(obbAxesA[i], obbAxesB[j]);
+		}
+	}
+
+	for (int i = 0; i < 15; ++i) {
+
+		Vector3f axisNormalize = Vector::Normalize(axes[i]);
+
+		float obbAProjection
+			= std::abs(a.size.x * Vector::Dot(obbAxesA[0], axisNormalize))
+			+ std::abs(a.size.y * Vector::Dot(obbAxesA[1], axisNormalize))
+			+ std::abs(a.size.z * Vector::Dot(obbAxesA[2], axisNormalize));
+
+		float obbBProjection
+			= std::abs(b.size.x * Vector::Dot(obbAxesB[0], axisNormalize))
+			+ std::abs(b.size.y * Vector::Dot(obbAxesB[1], axisNormalize))
+			+ std::abs(b.size.z * Vector::Dot(obbAxesB[2], axisNormalize));
+
+		float disatnce = std::abs(Vector::Dot(b.center - a.center, axisNormalize));
+
+		if (disatnce > obbAProjection + obbBProjection) {
+			return false;
+		}
+
+	}
+
+	return true;
+
 }

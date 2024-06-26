@@ -36,15 +36,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	OBB obb = {
+	OBB obbA = {
 		{ -1.0f, 0.0f, 0.0f },
 		Matrix4x4::MakeIdentity(),
 		{ 0.5f, 0.5f, 0.5f }
 	};
 
-	Segment segment = {
-		.origin = {-0.8f, -0.3f, 0.0f},
-		.diff   = {0.5f, 0.5f, 0.5f}
+	OBB obbB = {
+		{ 1.0f, 0.0f, 0.0f },
+		Matrix4x4::MakeIdentity(),
+		{ 0.5f, 0.5f, 0.5f }
 	};
 
 	/***********************************
@@ -65,17 +66,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("OBB")) {
-			obb.SetOnImGui();
+		if (ImGui::TreeNode("obbA")) {
+			obbA.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Segment")) {
-			segment.SetOnImGui();
+		if (ImGui::TreeNode("obbB")) {
+			obbB.SetOnImGui();
 			ImGui::TreePop();
 		}
 
-		bool isCollision = Collider::OBBToSegment(obb, segment);
+		bool isCollision = Collider::OBBToOBB(obbA, obbB);
 
 		std::string text = std::format("isCollision: {}", isCollision);
 		ImGui::Text(text.c_str());
@@ -101,12 +102,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		);
 
 		drawer->DrawOBB(
-			obb, color
+			obbA, color
 		);
 
-		drawer->DrawLine(
-			segment.origin, segment.origin + segment.diff, 0xFAFAFAFF
+		drawer->DrawOBB(
+			obbB, color
 		);
+
+		
 
 		///
 		/// ↑描画処理ここまで
