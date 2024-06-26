@@ -19,7 +19,7 @@ void Camera3D::Init() {
 	transform_.translate = { 0.0f, 1.9f, -6.49f };
 	UpdateMatrix();
 
-	SetProjection(0.45f, static_cast<float>(kWindowWidth) / static_cast<float>(kWindowHeight), 5.0f, 1000.0f); // default projection
+	SetProjection(0.45f, static_cast<float>(kWindowWidth) / static_cast<float>(kWindowHeight), 0.01f, 1000.0f); // default projection
 	SetViewport(0.0f, 0.0f, static_cast<float>(kWindowWidth), static_cast<float>(kWindowHeight), 0.0f, 1.0f); // default viewport
 
 }
