@@ -44,9 +44,9 @@ Vector3f Vector::Reflect(const Vector3f& i, const Vector3f& n) {
 
 Vector3f Vector::Lerp(const Vector3f& x, const Vector3f& y, float s) {
 	return {
-		x.x + s * (y.x - x.x),
-		x.y + s * (y.y - x.y),
-		x.z + s * (y.z - x.z)
+		std::lerp(x.x, y.x, s),
+		std::lerp(x.y, y.y, s),
+		std::lerp(x.z, y.z, s),
 	};
 }
 

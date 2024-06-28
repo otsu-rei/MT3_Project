@@ -36,16 +36,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	OBB obbA = {
-		{ -1.0f, 0.0f, 0.0f },
-		Matrix4x4::MakeIdentity(),
-		{ 0.5f, 0.5f, 0.5f }
-	};
-
-	OBB obbB = {
-		{ 1.0f, 0.0f, 0.0f },
-		Matrix4x4::MakeIdentity(),
-		{ 0.5f, 0.5f, 0.5f }
+	Vector3f controllPoint[3] = {
+		{ -0.8f, 0.58f, 1.0f },
+		{ 1.76f, 1.0f, -0.3f },
+		{ 0.94f, -0.7f, 2.3f },
 	};
 
 	/***********************************
@@ -66,27 +60,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("obbA")) {
-			obbA.SetOnImGui();
+		if (ImGui::TreeNode("controllPoint")) {
+
+			ImGui::DragFloat3("[0]", &controllPoint[0].x, 0.01f);
+			ImGui::DragFloat3("[1]", &controllPoint[1].x, 0.01f);
+			ImGui::DragFloat3("[2]", &controllPoint[2].x, 0.01f);
+
 			ImGui::TreePop();
 		}
-
-		if (ImGui::TreeNode("obbB")) {
-			obbB.SetOnImGui();
-			ImGui::TreePop();
-		}
-
-		bool isCollision = Collider::OBBToOBB(obbA, obbB);
-
-		std::string text = std::format("isCollision: {}", isCollision);
-		ImGui::Text(text.c_str());
 
 		ImGui::End();
-
-		uint32_t color = 0xFAFAFAFF;
-		if (isCollision) {
-			color = 0xFA0000FF;
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -101,15 +84,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawOBB(
-			obbA, color
+		drawer->DrawBezier(
+			controllPoint[0], controllPoint[1], controllPoint[2], 0xFAFAFAFF, 100
 		);
 
-		drawer->DrawOBB(
-			obbB, color
-		);
-
-		
+		for (int i = 0; i < 3; ++i) {
+			drawer->DrawSphere(
+				controllPoint[i], 0.01f, 16, 0x0A0A0AFF
+			);
+		}
 
 		///
 		/// ↑描画処理ここまで

@@ -82,6 +82,10 @@ public:
 		const OBB& obb, uint32_t color
 	);
 
+	void DrawBezier(
+		const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subduvision
+	);
+
 private:
 
 	//=========================================================================================

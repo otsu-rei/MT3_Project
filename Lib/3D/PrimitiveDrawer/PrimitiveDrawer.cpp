@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------------------
 #include <numbers>
 #include <MyMath.h>
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // PrimitiveDrawer class methods
@@ -269,6 +270,30 @@ void PrimitiveDrawer::DrawOBB(
 		DrawLine(pos[i], pos[i + 4], color);
 	}
 
+}
+
+void PrimitiveDrawer::DrawBezier(
+	const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subduvision) {
+
+	std::vector<Vector3f> point;
+	point.resize(subduvision);
+
+	for (uint32_t i = 0; i < subduvision; ++i) {
+		
+		float t = static_cast<float>(i) / (subduvision - 1);
+		
+		Vector3f p0 = Vector::Lerp(v1, v2, t);
+		Vector3f p1 = Vector::Lerp(v2, v3, t);
+		point[i] = Vector::Lerp(p0, p1, t);
+
+	}
+
+	// 描画
+	for (uint32_t i = 0; i < subduvision - 1; ++i) {
+		DrawLine(
+			point[i], point[i + 1], color
+		);
+	}
 }
 
 //=========================================================================================
