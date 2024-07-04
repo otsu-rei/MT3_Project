@@ -35,12 +35,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
+	
+	Transform shoulder = {
+		unitVector,
+		{ 0.0f, 0.0f, -6.8f },
+		{ 0.2f, 1.0f, 0.0f }
+	};
 
-	Vector3f controllPoint[4] = {
-		{ -0.8f, 0.58f, 1.0f },
-		{ 1.76f, 1.0f, -0.3f },
-		{ 0.94f, -0.7f, 2.3f },
-		{ -0.53f, -0.26f, -0.15f },
+	Transform elbow = {
+		unitVector,
+		{ 0.0f, 0.0f, -1.4f },
+		{ 0.4f, 0.0f, 0.0f }
+	};
+
+	Transform hand = {
+		unitVector,
+		{ 0.0f, 0.0f, 0.0f },
+		{ 0.3f, 0.0f, 0.0f }
 	};
 
 	/***********************************
@@ -61,19 +72,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("controllPoint")) {
+		if (ImGui::TreeNode("shoulder")) {
 
-			ImGui::DragFloat3("[0]", &controllPoint[0].x, 0.01f);
-			ImGui::DragFloat3("[1]", &controllPoint[1].x, 0.01f);
-			ImGui::DragFloat3("[2]", &controllPoint[2].x, 0.01f);
-			ImGui::DragFloat3("[3]", &controllPoint[3].x, 0.01f);
+			shoulder.DragTransform();
 
+			if (ImGui::TreeNode("elbow")) {
+
+				elbow.DragTransform();
+
+				if (ImGui::TreeNode("hand")) {
+
+					hand.DragTransform();
+
+					ImGui::TreePop();
+				}
+				ImGui::TreePop();
+			}
 			ImGui::TreePop();
 		}
 
 		ImGui::End();
 
+		Matrix4x4 shoulderWorldMat = shoulder.CreateMatrix();
+		Matrix4x4 elbowWorldMat    = elbow.CreateMatrix() * shoulderWorldMat;
+		Matrix4x4 handWorldMat     = hand.CreateMatrix() * elbowWorldMat;
 
+		Vector3f worldPositions[3];
+		worldPositions[0] = Matrix::Transform(origin, shoulderWorldMat);
+		worldPositions[1] = Matrix::Transform(origin, elbowWorldMat);
+		worldPositions[2] = Matrix::Transform(origin, handWorldMat);
 
 		///
 		/// ↑更新処理ここまで
@@ -88,13 +115,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawCatmullRom(
-			controllPoint[0], controllPoint[1], controllPoint[2], controllPoint[3], 0xFAFAFAFF, 100
+		drawer->DrawSphere(
+			worldPositions[0], 0.02f, 16, 0xFA0000FF
 		);
 
-		for (int i = 0; i < 4; ++i) {
-			drawer->DrawSphere(
-				controllPoint[i], 0.01f, 16, 0x0A0A0AFF
+		drawer->DrawSphere(
+			worldPositions[1], 0.02f, 16, 0x00FA00FF
+		);
+
+		drawer->DrawSphere(
+			worldPositions[2], 0.02f, 16, 0x0000FAFF
+		);
+
+		for (int i = 0; i < 2; ++i) {
+			drawer->DrawLine(
+				worldPositions[i], worldPositions[i + 1], 0xFAFAFAFF
 			);
 		}
 

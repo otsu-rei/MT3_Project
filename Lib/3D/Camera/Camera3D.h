@@ -10,6 +10,8 @@
 //-----------------------------------------------------------------------------------------
 #include "MyVector3.h"
 #include "MyMatrix4x4.h"
+#include "MyMath.h"
+#include "imgui.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Transform structure
@@ -18,6 +20,16 @@ struct Transform {
 	Vector3f scale     = unitVector;
 	Vector3f rotate    = origin;
 	Vector3f translate = origin;
+
+	void DragTransform() {
+		ImGui::DragFloat3("scale", &scale.x, 0.01f);
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		ImGui::DragFloat3("translate", &translate.x, 0.01f);
+	}
+
+	Matrix4x4 CreateMatrix() {
+		return Matrix::MakeAffine(scale, rotate, translate);
+	}
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
