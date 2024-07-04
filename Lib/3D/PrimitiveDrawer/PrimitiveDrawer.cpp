@@ -6,6 +6,8 @@
 #include <numbers>
 #include <MyMath.h>
 #include <vector>
+#include <cmath>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // PrimitiveDrawer class methods
@@ -273,23 +275,45 @@ void PrimitiveDrawer::DrawOBB(
 }
 
 void PrimitiveDrawer::DrawBezier(
-	const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subduvision) {
+	const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, uint32_t color, uint32_t subdivision) {
 
 	std::vector<Vector3f> point;
-	point.resize(subduvision);
+	point.resize(subdivision);
 
-	for (uint32_t i = 0; i < subduvision; ++i) {
+	for (uint32_t i = 0; i < subdivision; ++i) {
 		
-		float t = static_cast<float>(i) / (subduvision - 1);
+		float t = static_cast<float>(i) / (subdivision - 1);
 		
-		Vector3f p0 = Vector::Lerp(v1, v2, t);
-		Vector3f p1 = Vector::Lerp(v2, v3, t);
+		Vector3f p0 = Vector::Lerp(v0, v1, t);
+		Vector3f p1 = Vector::Lerp(v1, v2, t);
 		point[i] = Vector::Lerp(p0, p1, t);
 
 	}
 
 	// 描画
-	for (uint32_t i = 0; i < subduvision - 1; ++i) {
+	for (uint32_t i = 0; i < subdivision - 1; ++i) {
+		DrawLine(
+			point[i], point[i + 1], color
+		);
+	}
+}
+
+void PrimitiveDrawer::DrawCatmullRom(
+	const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subdivision) {
+
+	std::vector<Vector3f> point;
+	point.resize(subdivision);
+
+	for (uint32_t i = 0; i < subdivision; ++i) {
+
+		float t = static_cast<float>(i) / (subdivision - 1);
+
+		point[i] = CatmullRomPosition({ v0, v1, v2, v3 }, t);
+
+	}
+
+	// 描画
+	for (uint32_t i = 0; i < subdivision - 1; ++i) {
 		DrawLine(
 			point[i], point[i + 1], color
 		);

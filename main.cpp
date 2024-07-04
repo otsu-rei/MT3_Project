@@ -32,21 +32,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// camera
 	std::unique_ptr<Camera3D> camera = std::make_unique<Camera3D>();
 
-	std::unique_ptr<Camera3D> camera2 = std::make_unique<Camera3D>();
-	camera2->SetProjection(0.45f, static_cast<float>(kWindowWidth) / static_cast<float>(kWindowHeight), 0.01f, 1.0f);
-	camera2->SetTransform(unitVector, origin, origin);
-
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Vector3f controllPoint[3] = {
+	Vector3f controllPoint[4] = {
 		{ -0.8f, 0.58f, 1.0f },
 		{ 1.76f, 1.0f, -0.3f },
 		{ 0.94f, -0.7f, 2.3f },
+		{ -0.53f, -0.26f, -0.15f },
 	};
-
-	Vector3f point = { 0.0f, 0.0f, 0.0f };
 
 	/***********************************
 	 * ゲームループ *
@@ -66,17 +61,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("test")) {
-			camera2->SetOnImGui();
-			ImGui::DragFloat3("position", &point.x, 0.01f);
-			ImGui::TreePop();
-		}
-
 		if (ImGui::TreeNode("controllPoint")) {
 
 			ImGui::DragFloat3("[0]", &controllPoint[0].x, 0.01f);
 			ImGui::DragFloat3("[1]", &controllPoint[1].x, 0.01f);
 			ImGui::DragFloat3("[2]", &controllPoint[2].x, 0.01f);
+			ImGui::DragFloat3("[3]", &controllPoint[3].x, 0.01f);
 
 			ImGui::TreePop();
 		}
@@ -98,21 +88,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		/*drawer->DrawBezier(
-			controllPoint[0], controllPoint[1], controllPoint[2], 0xFAFAFAFF, 100
+		drawer->DrawCatmullRom(
+			controllPoint[0], controllPoint[1], controllPoint[2], controllPoint[3], 0xFAFAFAFF, 100
 		);
 
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 4; ++i) {
 			drawer->DrawSphere(
 				controllPoint[i], 0.01f, 16, 0x0A0A0AFF
 			);
-		}*/
-
-		drawer->DrawFrustum(camera2.get(), 0xFAFA00FF);
-
-		drawer->DrawSphere(
-			point, 0.01f, 16, color
-		);
+		}
 
 		///
 		/// ↑描画処理ここまで

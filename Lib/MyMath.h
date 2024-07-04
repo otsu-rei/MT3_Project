@@ -7,6 +7,7 @@
 #include <MyVector3.h>
 #include <MyMatrix4x4.h>
 #include <VectorComparison.h>
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Vector namespace
@@ -74,6 +75,11 @@ namespace Matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 float Saturate(float v);
+
+Vector3f CatmullRomInterpolation(const Vector3f& p0, const Vector3f& p1, const Vector3f& p2, const Vector3f& p3, float t);
+
+Vector3f CatmullRomPosition(const std::vector<Vector3f>& points, float t);
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // constexpr

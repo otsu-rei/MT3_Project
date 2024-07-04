@@ -83,7 +83,11 @@ public:
 	);
 
 	void DrawBezier(
-		const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subduvision
+		const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, uint32_t color, uint32_t subduvision
+	);
+
+	void DrawCatmullRom(
+		const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subdivision
 	);
 
 	void DrawFrustum(
