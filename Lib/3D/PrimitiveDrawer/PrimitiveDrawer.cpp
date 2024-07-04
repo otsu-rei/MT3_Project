@@ -296,6 +296,34 @@ void PrimitiveDrawer::DrawBezier(
 	}
 }
 
+void PrimitiveDrawer::DrawFrustum(Camera3D* camera, uint32_t color) {
+
+	assert(camera != camera_); //!< 映してるカメラと同じカメラは描画不可
+
+
+	Vector3f frustumPoint[4];
+
+	Matrix4x4 clipMatrix = Matrix::Inverse(camera->GetProjectionMatrix()) * Matrix::Inverse(camera->GetViewMatrix());
+
+	frustumPoint[0] = Matrix::Transform({ -1.0f, -1.0f, 1.0f }, clipMatrix);
+	frustumPoint[1] = Matrix::Transform({ 1.0f, -1.0f, 1.0f }, clipMatrix);
+	frustumPoint[2] = Matrix::Transform({ 1.0f, 1.0f, 1.0f }, clipMatrix);
+	frustumPoint[3] = Matrix::Transform({ -1.0f, 1.0f, 1.0f }, clipMatrix);
+
+	for (int i = 0; i < 4; ++i) {
+
+		DrawLine(
+			frustumPoint[i], frustumPoint[(i + 1) % 4], color
+		);
+
+		DrawLine(
+			frustumPoint[i], camera->GetTransform().translate, color
+		);
+	}
+
+
+}
+
 //=========================================================================================
 // private
 //=========================================================================================

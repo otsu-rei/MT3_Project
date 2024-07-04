@@ -39,6 +39,9 @@ public:
 	//! @brief transform_を元にviewMatrixの生成
 	void UpdateMatrix();
 
+	//! @brief transformを設定してMatrixの生成
+	void SetTransform(const Vector3f& scale, const Vector3f& rotate, const Vector3f& translate);
+
 	//! @brief projectionを設定してMatrixの生成
 	//! 
 	//! @param[in] ...
@@ -52,6 +55,12 @@ public:
 	//! @brief viewMatrix * projMatrix の取得
 	Matrix4x4 GetViewProjMatrix() const { return viewMatrix_ * projectionMatrix_; }
 
+	//! @brief viewMatrixの取得
+	const Matrix4x4& GetViewMatrix() const { return viewMatrix_; }
+
+	//! @brief projMatrixの取得
+	const Matrix4x4& GetProjectionMatrix() const { return projectionMatrix_; }
+
 	//! @brief viewprotMatrix の取得
 	const Matrix4x4& GetViewportMatrix() const { return viewportMatrix_; }
 
@@ -61,6 +70,8 @@ public:
 	void SetOnImGui();
 
 	void UpdateControl();
+
+	void DrawFrustum(uint32_t color); //!< primitiveに移動
 
 	//=========================================================================================
 	// public variables

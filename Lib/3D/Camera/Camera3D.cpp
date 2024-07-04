@@ -8,6 +8,7 @@
 #include <Novice.h>
 #include <imgui.h>
 #include <MyMath.h>
+#include <PrimitiveDrawer.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Camera3D class methods
@@ -27,6 +28,13 @@ void Camera3D::Init() {
 void Camera3D::UpdateMatrix() {
 	Matrix4x4 cameraMatrix = Matrix::MakeAffine(transform_.scale, transform_.rotate, transform_.translate);
 	viewMatrix_ = Matrix::Inverse(cameraMatrix);
+}
+
+void Camera3D::SetTransform(const Vector3f& scale, const Vector3f& rotate, const Vector3f& translate) {
+	transform_.scale = scale;
+	transform_.rotate = rotate;
+	transform_.translate = translate;
+	UpdateMatrix();
 }
 
 void Camera3D::SetProjection(
@@ -107,4 +115,31 @@ void Camera3D::UpdateControl() {
 	transform_.rotate.y = control_.lon;
 
 	UpdateMatrix();
+}
+
+void Camera3D::DrawFrustum(uint32_t color) {
+
+	Vector3f frustumPoint[4];
+
+	Matrix4x4 clipMatrix = Matrix::Inverse(projectionMatrix_);
+	Matrix4x4 worldMatrix = Matrix::Inverse(viewMatrix_);
+
+	frustumPoint[0] = Matrix::Transform(Matrix::Transform({-1.0f, -1.0f, 1.0f}, clipMatrix), worldMatrix);
+	frustumPoint[1] = Matrix::Transform(Matrix::Transform({1.0f, -1.0f, 1.0f}, clipMatrix), worldMatrix);
+	frustumPoint[2] = Matrix::Transform(Matrix::Transform({1.0f, 1.0f, 1.0f}, clipMatrix), worldMatrix);
+	frustumPoint[3] = Matrix::Transform(Matrix::Transform({-1.0f, 1.0f, 1.0f}, clipMatrix), worldMatrix);
+
+	auto drawer = PrimitiveDrawer::GetInstance();
+
+	for (int i = 0; i < 4; ++i) {
+
+		drawer->DrawLine(
+			frustumPoint[i], frustumPoint[(i + 1) % 4], color
+		);
+
+		drawer->DrawLine(
+			frustumPoint[i], transform_.translate, color
+		);
+	}
+
 }

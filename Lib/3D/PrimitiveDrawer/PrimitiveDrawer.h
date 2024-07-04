@@ -86,6 +86,10 @@ public:
 		const Vector3f& v1, const Vector3f& v2, const Vector3f& v3, uint32_t color, uint32_t subduvision
 	);
 
+	void DrawFrustum(
+		Camera3D* camera, uint32_t color
+	);
+
 private:
 
 	//=========================================================================================
