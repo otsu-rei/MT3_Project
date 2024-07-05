@@ -35,24 +35,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// drawer
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
-	
-	Transform shoulder = {
-		unitVector,
-		{ 0.0f, 0.0f, -6.8f },
-		{ 0.2f, 1.0f, 0.0f }
-	};
 
-	Transform elbow = {
-		unitVector,
-		{ 0.0f, 0.0f, -1.4f },
-		{ 0.4f, 0.0f, 0.0f }
-	};
-
-	Transform hand = {
-		unitVector,
-		{ 0.0f, 0.0f, 0.0f },
-		{ 0.3f, 0.0f, 0.0f }
-	};
+	Vector3f a = { 0.2f, 1.0f, 0.0f };
+	Vector3f b = { 2.4f, 3.1f, 1.2f };
+	Vector3f rotate = { 0.4f, 1.43f, -0.8f };
 
 	/***********************************
 	 * ゲームループ *
@@ -72,35 +58,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("shoulder")) {
+		if (ImGui::TreeNode("Calculation")) {
+			ImGui::DragFloat3("a", &a.x, 0.01f);
+			ImGui::DragFloat3("b", &b.x, 0.01f);
+			ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+			ImGui::Spacing();
+			
+			ImGui::Text("result");
+			ImGui::Separator();
 
-			shoulder.DragTransform();
+			Vector3f add      = a + b;
+			Vector3f subtract = a - b;
+			Vector3f mul      = a * 2.4f;
 
-			if (ImGui::TreeNode("elbow")) {
+			Matrix4x4 mat = Matrix::MakeRotate(rotate);
 
-				elbow.DragTransform();
+			ImGui::Text("a + b:    x = %f, y = %f, z = %f", add.x, add.y, add.z);
+			ImGui::Text("a - b:    x = %f, y = %f, z = %f", subtract.x, subtract.y, subtract.z);
+			ImGui::Text("a * 2.4f: x = %f, y = %f, z = %f", mul.x, mul.y, mul.z);
 
-				if (ImGui::TreeNode("hand")) {
+			ImGui::Text(
+				"matrix: \n %f, %f, %f, %f \n %f, %f, %f, %f \n %f, %f, %f, %f \n %f, %f, %f, %f",
+				mat.m[0][0], mat.m[0][1], mat.m[0][2], mat.m[0][3],
+				mat.m[1][0], mat.m[1][1], mat.m[1][2], mat.m[1][3],
+				mat.m[2][0], mat.m[2][1], mat.m[2][2], mat.m[2][3],
+				mat.m[3][0], mat.m[3][1], mat.m[3][2], mat.m[3][3]
+			);
 
-					hand.DragTransform();
-
-					ImGui::TreePop();
-				}
-				ImGui::TreePop();
-			}
 			ImGui::TreePop();
 		}
 
 		ImGui::End();
-
-		Matrix4x4 shoulderWorldMat = shoulder.CreateMatrix();
-		Matrix4x4 elbowWorldMat    = elbow.CreateMatrix() * shoulderWorldMat;
-		Matrix4x4 handWorldMat     = hand.CreateMatrix() * elbowWorldMat;
-
-		Vector3f worldPositions[3];
-		worldPositions[0] = Matrix::Transform(origin, shoulderWorldMat);
-		worldPositions[1] = Matrix::Transform(origin, elbowWorldMat);
-		worldPositions[2] = Matrix::Transform(origin, handWorldMat);
 
 		///
 		/// ↑更新処理ここまで
@@ -114,24 +102,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
 		);
-
-		drawer->DrawSphere(
-			worldPositions[0], 0.02f, 16, 0xFA0000FF
-		);
-
-		drawer->DrawSphere(
-			worldPositions[1], 0.02f, 16, 0x00FA00FF
-		);
-
-		drawer->DrawSphere(
-			worldPositions[2], 0.02f, 16, 0x0000FAFF
-		);
-
-		for (int i = 0; i < 2; ++i) {
-			drawer->DrawLine(
-				worldPositions[i], worldPositions[i + 1], 0xFAFAFAFF
-			);
-		}
 
 		///
 		/// ↑描画処理ここまで
