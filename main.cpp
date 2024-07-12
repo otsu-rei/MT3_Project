@@ -38,25 +38,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	drawer->SetCamera(camera.get());
 
 	Ball ball = {};
-	ball.position = { 0.8f, 0.2f, 0.0f };
+	ball.position = { 0.0f };
 	ball.mass     = 2.0f;
 	ball.radius   = 0.05f;
-	ball.color    = 0x0000FAFF;
+	ball.color    = 0xFAFAFAFF;
 
-	Spring spring = {};
-	spring.anchor             = { 0.0f, 1.0f, 0.0f };
-	spring.natureLength       = 0.7f;
-	spring.stiffness          = 100.0f;
-	spring.dampingCoefficient = 2.0f;
+	Vector3f center = { 0.0f };
+	float radius = 0.8f; //!< 半径
+	float omega = pi_v;        //!< 角速度
+	float angle = 0.0f;
 
-	const Vector3f kGravity = { 0.0f, -9.8f, 0.0f };
+	// 位置の初期化
+	ball.position.x = center.x + std::cos(angle) * radius;
+	ball.position.y = center.y + std::sin(angle) * radius;
+	ball.position.z = center.z;
 
 	bool isUpdate = false;
 
 	/***********************************
 	 * ゲームループ *
 	 ***********************************/
-	 // ウィンドウの×ボタンが押されるまでループ
+	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
 		Novice::BeginFrame();
@@ -76,31 +78,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("spring")) {
-			spring.SetImGui();
-			ImGui::TreePop();
-		}
-
 		ImGui::Checkbox("isUpdate", &isUpdate);
 
 		ImGui::End();
 
 		if (isUpdate) {
 
-			// spring 
-			Vector3f diff = ball.position - spring.anchor;
-			float length = Vector::Length(diff);
+			angle += omega * deltaTime;
 
-			if (length != 0.0f) {
-				Vector3f direciton = Vector::Normalize(diff);
-				Vector3f restPosition = spring.anchor + direciton * spring.natureLength;
-				Vector3f displacement = length * (ball.position - restPosition);
-				Vector3f restoringForce = -spring.stiffness * displacement;
-				Vector3f dampingForce = -spring.dampingCoefficient * ball.velocity;
-				Vector3f force = restoringForce + dampingForce;
-
-				ball.acceleration = (force + kGravity) / ball.mass;
-			}
+			ball.velocity.x = -radius * omega * std::sin(angle);
+			ball.velocity.y = radius * omega * std::cos(angle);
+			
+			ball.acceleration.x = -(omega * omega) * radius * std::cos(angle);
+			ball.acceleration.y = -(omega * omega) * radius * std::sin(angle);
 
 			ball.velocity += ball.acceleration * deltaTime;
 			ball.position += ball.velocity * deltaTime;
@@ -121,11 +111,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		);
 
 		drawer->DrawSphere(
-			ball.position, ball.radius, 16, ball.color
+			center, 0.02f, 16, 0x00FA00FF
 		);
 
-		drawer->DrawLine(
-			ball.position, spring.anchor, 0xFAFAFAFF
+		drawer->DrawSphere(
+			ball.position, ball.radius, 16, ball.color
 		);
 
 
@@ -136,7 +126,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// フレームの終了
 		Novice::EndFrame();
 
-		// ESCキーが押されたらループを抜ける
+		// F4キーが押されたらループを抜ける
 		if (Input::IsTriggerKeys(DIK_F4)) {
 			break;
 		}
