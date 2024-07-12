@@ -17,6 +17,7 @@
 #include "Camera3D.h"
 #include "PrimitiveDrawer.h"
 #include "Collider.h"
+#include "Physics.h"
 
 /***********************************
  * メイン関数 *
@@ -36,9 +37,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Vector3f a = { 0.2f, 1.0f, 0.0f };
-	Vector3f b = { 2.4f, 3.1f, 1.2f };
-	Vector3f rotate = { 0.4f, 1.43f, -0.8f };
+	Ball ball = {};
+	ball.position = { 1.2f, 0.0f, 0.0f };
+	ball.mass     = 2.0f;
+	ball.radius   = 0.05f;
+	ball.color    = 0x0000FAFF;
+
+	Spring spring = {};
+	spring.anchor             = { 0.0f, 0.0f, 0.0f };
+	spring.natureLength       = 1.0f;
+	spring.stiffness          = 100.0f;
+	spring.dampingCoefficient = 2.0f;
+
+	bool isUpdate = false;
 
 	/***********************************
 	 * ゲームループ *
@@ -58,37 +69,40 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("Calculation")) {
-			ImGui::DragFloat3("a", &a.x, 0.01f);
-			ImGui::DragFloat3("b", &b.x, 0.01f);
-			ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
-			ImGui::Spacing();
-			
-			ImGui::Text("result");
-			ImGui::Separator();
-
-			Vector3f add      = a + b;
-			Vector3f subtract = a - b;
-			Vector3f mul      = a * 2.4f;
-
-			Matrix4x4 mat = Matrix::MakeRotate(rotate);
-
-			ImGui::Text("a + b:    x = %f, y = %f, z = %f", add.x, add.y, add.z);
-			ImGui::Text("a - b:    x = %f, y = %f, z = %f", subtract.x, subtract.y, subtract.z);
-			ImGui::Text("a * 2.4f: x = %f, y = %f, z = %f", mul.x, mul.y, mul.z);
-
-			ImGui::Text(
-				"matrix: \n %f, %f, %f, %f \n %f, %f, %f, %f \n %f, %f, %f, %f \n %f, %f, %f, %f",
-				mat.m[0][0], mat.m[0][1], mat.m[0][2], mat.m[0][3],
-				mat.m[1][0], mat.m[1][1], mat.m[1][2], mat.m[1][3],
-				mat.m[2][0], mat.m[2][1], mat.m[2][2], mat.m[2][3],
-				mat.m[3][0], mat.m[3][1], mat.m[3][2], mat.m[3][3]
-			);
-
+		if (ImGui::TreeNode("ball")) {
+			ball.SetImGui();
 			ImGui::TreePop();
 		}
 
+		if (ImGui::TreeNode("spring")) {
+			spring.SetImGui();
+			ImGui::TreePop();
+		}
+
+		ImGui::Checkbox("isUpdate", &isUpdate);
+
 		ImGui::End();
+
+		if (isUpdate) {
+
+			Vector3f diff = ball.position - spring.anchor;
+			float length = Vector::Length(diff);
+
+			if (length != 0.0f) {
+				Vector3f direciton = Vector::Normalize(diff);
+				Vector3f restPosition = spring.anchor + direciton * spring.natureLength;
+				Vector3f displacement = length * (ball.position - restPosition);
+				Vector3f restoringForce = -spring.stiffness * displacement;
+				Vector3f dampingForce = -spring.dampingCoefficient * ball.velocity;
+				Vector3f force = restoringForce + dampingForce;
+
+				ball.acceleration = force / ball.mass;
+			}
+
+			ball.velocity += ball.acceleration * deltaTime;
+			ball.position += ball.velocity * deltaTime;
+
+		}
 
 		///
 		/// ↑更新処理ここまで
@@ -102,6 +116,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
 		);
+
+		drawer->DrawSphere(
+			ball.position, ball.radius, 16, ball.color
+		);
+
+		drawer->DrawLine(
+			ball.position, spring.anchor, 0xFAFAFAFF
+		);
+
 
 		///
 		/// ↑描画処理ここまで

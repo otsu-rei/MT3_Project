@@ -47,6 +47,9 @@
     <Filter Include="Lib\3D\Collider">
       <UniqueIdentifier>{78d78a47-1832-4294-89f5-a6ae1987e88e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\3D\Physics">
+      <UniqueIdentifier>{d66bde22-4b24-4a6b-8059-ed32d6c1dbb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="Lib\MyMath.cpp">
       <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\3D\Physics\Physics.cpp">
+      <Filter>Lib\3D\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="Lib\MyMath.h">
       <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\3D\Physics\Physics.h">
+      <Filter>Lib\3D\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
