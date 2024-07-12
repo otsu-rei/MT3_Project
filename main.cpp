@@ -38,16 +38,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	drawer->SetCamera(camera.get());
 
 	Ball ball = {};
-	ball.position = { 1.2f, 0.0f, 0.0f };
+	ball.position = { 0.8f, 0.2f, 0.0f };
 	ball.mass     = 2.0f;
 	ball.radius   = 0.05f;
 	ball.color    = 0x0000FAFF;
 
 	Spring spring = {};
-	spring.anchor             = { 0.0f, 0.0f, 0.0f };
-	spring.natureLength       = 1.0f;
+	spring.anchor             = { 0.0f, 1.0f, 0.0f };
+	spring.natureLength       = 0.7f;
 	spring.stiffness          = 100.0f;
 	spring.dampingCoefficient = 2.0f;
+
+	const Vector3f kGravity = { 0.0f, -9.8f, 0.0f };
 
 	bool isUpdate = false;
 
@@ -85,6 +87,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (isUpdate) {
 
+			// spring 
 			Vector3f diff = ball.position - spring.anchor;
 			float length = Vector::Length(diff);
 
@@ -96,7 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Vector3f dampingForce = -spring.dampingCoefficient * ball.velocity;
 				Vector3f force = restoringForce + dampingForce;
 
-				ball.acceleration = force / ball.mass;
+				ball.acceleration = (force + kGravity) / ball.mass;
 			}
 
 			ball.velocity += ball.acceleration * deltaTime;
