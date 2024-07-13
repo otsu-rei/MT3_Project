@@ -37,23 +37,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Ball ball = {};
-	ball.position = { 0.0f };
-	ball.mass     = 2.0f;
-	ball.radius   = 0.05f;
-	ball.color    = 0xFAFAFAFF;
+	Quaternion q1 = { 2.0f, 3.0f, 4.0f, 1.0f };
+	Quaternion q2 = { 1.0f, 3.0f, 5.0f, 2.0f };
 
-	Vector3f center = { 0.0f };
-	float radius = 0.8f; //!< 半径
-	float omega = pi_v;        //!< 角速度
-	float angle = 0.0f;
+	Quaternion conj = Conjugation(q1);
+	Quaternion inv = Inverse(q1);
+	Quaternion normlize = Normalize(q1);
 
-	// 位置の初期化
-	ball.position.x = center.x + std::cos(angle) * radius;
-	ball.position.y = center.y + std::sin(angle) * radius;
-	ball.position.z = center.z;
 
-	bool isUpdate = false;
 
 	/***********************************
 	 * ゲームループ *
@@ -73,29 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		if (ImGui::TreeNode("ball")) {
-			ball.SetImGui();
-			ImGui::TreePop();
-		}
-
-		ImGui::Checkbox("isUpdate", &isUpdate);
-
 		ImGui::End();
-
-		if (isUpdate) {
-
-			angle += omega * deltaTime;
-
-			ball.velocity.x = -radius * omega * std::sin(angle);
-			ball.velocity.y = radius * omega * std::cos(angle);
-			
-			ball.acceleration.x = -(omega * omega) * radius * std::cos(angle);
-			ball.acceleration.y = -(omega * omega) * radius * std::sin(angle);
-
-			ball.velocity += ball.acceleration * deltaTime;
-			ball.position += ball.velocity * deltaTime;
-
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -108,14 +77,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawer->DrawGrid(
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
-		);
-
-		drawer->DrawSphere(
-			center, 0.02f, 16, 0x00FA00FF
-		);
-
-		drawer->DrawSphere(
-			ball.position, ball.radius, 16, ball.color
 		);
 
 
