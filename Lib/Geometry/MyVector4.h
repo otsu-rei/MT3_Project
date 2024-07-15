@@ -53,6 +53,14 @@ public:
 
 	static Quaternion Identity();
 
+	Quaternion Conjugation() const;
+
+	float Norm() const;
+
+	Quaternion Normalize() const;
+
+	Quaternion Inverse() const;
+
 	//=========================================================================================
 	// compound assignment operator
 	//=========================================================================================
@@ -72,15 +80,3 @@ public:
 //=========================================================================================
 
 Quaternion operator*(const Quaternion& q, const Quaternion& r);
-
-////////////////////////////////////////////////////////////////////////////////////////////
-// Quaternion methods
-////////////////////////////////////////////////////////////////////////////////////////////
-
-Quaternion Conjugation(const Quaternion& q);
-
-float Norm(const Quaternion& q);
-
-Quaternion Normalize(const Quaternion& q);
-
-Quaternion Inverse(const Quaternion& q);

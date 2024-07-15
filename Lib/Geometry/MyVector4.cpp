@@ -71,24 +71,24 @@ Quaternion operator*(const Quaternion& q, const Quaternion& r) {
 	return result;
 }
 
-Quaternion Conjugation(const Quaternion& q) {
-	return { -q.x, -q.y, -q.z, q.w };
+Quaternion Quaternion::Conjugation() const {
+	return { -x, -y, -z, w };
 }
 
-float Norm(const Quaternion& q) {
-	return std::sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+float Quaternion::Norm() const {
+	return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-Quaternion Normalize(const Quaternion& q) {
-	float norm = Norm(q);
+Quaternion Quaternion::Normalize() const {
+	float norm = Norm();
 
-	return { q.x / norm, q.y / norm, q.z / norm, q.w / norm };
+	return { x / norm, y / norm, z / norm, w / norm };
 }
 
-Quaternion Inverse(const Quaternion& q) {
+Quaternion Quaternion::Inverse() const {
 
-	Quaternion conj = Conjugation(q);
-	float norm2 = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
+	Quaternion conj = Conjugation();
+	float norm2 = x * x + y * y + z * z + w * w;
 
 	return { conj.x / norm2, conj.y / norm2, conj.z / norm2, conj.w / norm2 };
 }

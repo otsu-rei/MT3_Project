@@ -40,9 +40,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Quaternion q1 = { 2.0f, 3.0f, 4.0f, 1.0f };
 	Quaternion q2 = { 1.0f, 3.0f, 5.0f, 2.0f };
 
-	Quaternion conj = Conjugation(q1);
-	Quaternion inv = Inverse(q1);
-	Quaternion normlize = Normalize(q1);
+	Quaternion conj = q1.Conjugation();
+	Quaternion inv = q1.Inverse();
+	Quaternion normlize = q1.Normalize();
 
 
 
