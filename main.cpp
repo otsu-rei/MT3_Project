@@ -37,14 +37,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Quaternion q1 = { 2.0f, 3.0f, 4.0f, 1.0f };
-	Quaternion q2 = { 1.0f, 3.0f, 5.0f, 2.0f };
+	Pendulum pendulum = {};
+	pendulum.anchor              = { 0.0f, 1.0f, 0.0f };
+	pendulum.length              = 0.8f;
+	pendulum.angle               = 0.7f;
+	pendulum.angularVelocity     = 0.0f;
+	pendulum.angularAcceleration = 0.0f;
 
-	Quaternion conj = q1.Conjugation();
-	Quaternion inv = q1.Inverse();
-	Quaternion normlize = q1.Normalize();
+	Vector3f ballPosition = { 0.0f };
 
+	ballPosition.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
+	ballPosition.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
+	ballPosition.z = pendulum.anchor.z;
 
+	bool isUpdate = false;
 
 	/***********************************
 	 * ゲームループ *
@@ -64,7 +70,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
+		ImGui::Checkbox("isUpdate", &isUpdate);
+
 		ImGui::End();
+
+		if (isUpdate) {
+
+			pendulum.angularAcceleration
+				= -(kGrabity / pendulum.length) * std::sin(pendulum.angle);
+
+			pendulum.angularVelocity += pendulum.angularAcceleration * deltaTime;
+			pendulum.angle += pendulum.angularVelocity * deltaTime;
+
+			ballPosition.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
+			ballPosition.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
+			ballPosition.z = pendulum.anchor.z;
+
+		}
 
 		///
 		/// ↑更新処理ここまで
@@ -77,6 +99,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawer->DrawGrid(
 			{0.0f, 0.0f, 0.0f},
 			4.0f, 10, 0x505050FF
+		);
+
+		drawer->DrawLine(
+			pendulum.anchor, ballPosition, 0xFAFAFAFF
+		);
+
+		drawer->DrawSphere(
+			ballPosition, 0.04f, 16, 0xFAFAFAFF
 		);
 
 

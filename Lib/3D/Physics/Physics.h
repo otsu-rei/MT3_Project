@@ -19,6 +19,8 @@
 static float deltaTime = 1.0f / 60.0f;
 // todo: 可変フレームレートに対応
 
+static const float kGrabity = 9.8f;
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // structure
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,3 +57,18 @@ struct Spring {
 	}
 };
 
+struct Pendulum {
+	Vector3f anchor;           //!< 固定された位置
+	float length;              //!< 紐の長さ
+	float angle;               //!< 現在の角度
+	float angularVelocity;     //!< 角速度
+	float angularAcceleration; //!< 角加速度
+
+	void SetImGui() {
+		ImGui::DragFloat3("anchor",             &anchor.x, 0.02f);
+		ImGui::DragFloat("length",              &length, 0.02f);
+		ImGui::DragFloat("angle",               &angle, 0.02f);
+		ImGui::DragFloat("angleVelocity",       &angularVelocity, 0.02f);
+		ImGui::DragFloat("angularAcceleration", &angularAcceleration, 0.02f);
+	}
+};
