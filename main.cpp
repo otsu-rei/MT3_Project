@@ -37,18 +37,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Pendulum pendulum = {};
-	pendulum.anchor              = { 0.0f, 1.0f, 0.0f };
-	pendulum.length              = 0.8f;
-	pendulum.angle               = 0.7f;
-	pendulum.angularVelocity     = 0.0f;
-	pendulum.angularAcceleration = 0.0f;
+	ConicalPendulum pendulum = {};
+	pendulum.anchor = { 0.0f, 1.0f, 0.0f };
+	pendulum.length = 0.8f;
+	pendulum.halfApexAngle = 0.7f;
+	pendulum.angle = 0.0f;
+	pendulum.angularVelocity = 0.0f;
 
-	Vector3f ballPosition = { 0.0f };
+	float radius = std::sin(pendulum.halfApexAngle) * pendulum.length;
+	float height = std::cos(pendulum.halfApexAngle) * pendulum.length;
 
-	ballPosition.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
-	ballPosition.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
-	ballPosition.z = pendulum.anchor.z;
+	Vector3f position = {
+		pendulum.anchor.x + std::cos(pendulum.angle) * radius,
+		pendulum.anchor.y - height,
+		pendulum.anchor.z - std::sin(pendulum.angle) * radius
+	};
 
 	bool isUpdate = false;
 
@@ -76,15 +79,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (isUpdate) {
 
-			pendulum.angularAcceleration
-				= -(kGrabity / pendulum.length) * std::sin(pendulum.angle);
-
-			pendulum.angularVelocity += pendulum.angularAcceleration * deltaTime;
+			pendulum.angularVelocity = std::sqrt(kGrabity / (pendulum.length * std::cos(pendulum.halfApexAngle)));
 			pendulum.angle += pendulum.angularVelocity * deltaTime;
 
-			ballPosition.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
-			ballPosition.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
-			ballPosition.z = pendulum.anchor.z;
+			radius = std::sin(pendulum.halfApexAngle) * pendulum.length;
+			height = std::cos(pendulum.halfApexAngle) * pendulum.length;
+
+			position = {
+				pendulum.anchor.x + std::cos(pendulum.angle) * radius,
+				pendulum.anchor.y - height,
+				pendulum.anchor.z - std::sin(pendulum.angle) * radius
+			};
 
 		}
 
@@ -102,11 +107,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		);
 
 		drawer->DrawLine(
-			pendulum.anchor, ballPosition, 0xFAFAFAFF
+			pendulum.anchor, position, 0xFAFAFAFF
 		);
 
 		drawer->DrawSphere(
-			ballPosition, 0.04f, 16, 0xFAFAFAFF
+			position, 0.04f, 16, 0xFAFAFAFF
 		);
 
 

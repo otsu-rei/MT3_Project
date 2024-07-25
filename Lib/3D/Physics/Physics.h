@@ -72,3 +72,19 @@ struct Pendulum {
 		ImGui::DragFloat("angularAcceleration", &angularAcceleration, 0.02f);
 	}
 };
+
+struct ConicalPendulum {
+	Vector3f anchor;       //!< 固定された位置
+	float length;          //!< 紐の長さ
+	float halfApexAngle;   //!< 円錐の頂角の半分
+	float angle;           //!< 角度
+	float angularVelocity; //!< 角速度
+
+	void SetImGui() {
+		ImGui::DragFloat3("anchor",       &anchor.x, 0.02f);
+		ImGui::DragFloat("length",        &length, 0.02f);
+		ImGui::DragFloat("halfApexAngle", &halfApexAngle, 0.02f);
+		ImGui::DragFloat("angle",         &angle, 0.02f);
+		ImGui::DragFloat("angleVelocity", &angularVelocity, 0.02f);
+	}
+};
