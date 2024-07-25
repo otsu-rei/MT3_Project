@@ -37,23 +37,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	ConicalPendulum pendulum = {};
-	pendulum.anchor = { 0.0f, 1.0f, 0.0f };
-	pendulum.length = 0.8f;
-	pendulum.halfApexAngle = 0.7f;
-	pendulum.angle = 0.0f;
-	pendulum.angularVelocity = 0.0f;
-
-	float radius = std::sin(pendulum.halfApexAngle) * pendulum.length;
-	float height = std::cos(pendulum.halfApexAngle) * pendulum.length;
-
-	Vector3f position = {
-		pendulum.anchor.x + std::cos(pendulum.angle) * radius,
-		pendulum.anchor.y - height,
-		pendulum.anchor.z - std::sin(pendulum.angle) * radius
-	};
-
 	bool isUpdate = false;
+
+	Ball ball = {};
+	ball.position = { 0.8f, 1.2f, 0.3f };
+	ball.acceleration = { 0.0f, -kGrabity, 0.0f };
+	ball.mass = 2.0f;
+	ball.radius = 0.05f;
+	ball.color = 0xFAFAFAFF;
+
+	Plane plane = {};
+	plane.normal = Vector::Normalize({-0.2f, 0.9f, -0.3f});
+	plane.distance = 0.0f;
+
+	const float e = 0.8f;
 
 	/***********************************
 	 * ゲームループ *
@@ -79,17 +76,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (isUpdate) {
 
-			pendulum.angularVelocity = std::sqrt(kGrabity / (pendulum.length * std::cos(pendulum.halfApexAngle)));
-			pendulum.angle += pendulum.angularVelocity * deltaTime;
+			ball.velocity += ball.acceleration * deltaTime;
+			ball.position += ball.velocity * deltaTime;
 
-			radius = std::sin(pendulum.halfApexAngle) * pendulum.length;
-			height = std::cos(pendulum.halfApexAngle) * pendulum.length;
-
-			position = {
-				pendulum.anchor.x + std::cos(pendulum.angle) * radius,
-				pendulum.anchor.y - height,
-				pendulum.anchor.z - std::sin(pendulum.angle) * radius
-			};
+			if (Collider::PlaneToSphere(plane, Sphere{ball.position, ball.radius})) {
+				Vector3f reflected = Vector::Reflect(ball.velocity, plane.normal);
+				Vector3f projectToNormal = Project(reflected, plane.normal);
+				Vector3f movingDirction = reflected - projectToNormal;
+				ball.velocity = projectToNormal * e + movingDirction;
+			}
 
 		}
 
@@ -106,12 +101,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			4.0f, 10, 0x505050FF
 		);
 
-		drawer->DrawLine(
-			pendulum.anchor, position, 0xFAFAFAFF
+		drawer->DrawPlane(
+			plane, 0xFAFAFAFF
 		);
 
 		drawer->DrawSphere(
-			position, 0.04f, 16, 0xFAFAFAFF
+			ball.position, ball.radius, 16, ball.color
 		);
 
 
