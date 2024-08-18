@@ -107,19 +107,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		drawer->DrawGrid(
-			{0.0f, 0.0f, 0.0f},
-			4.0f, 10, 0x505050FF
-		);
-
-		drawer->DrawPlane(
-			plane, 0xFAFAFAFF
-		);
-
-		drawer->DrawSphere(
-			ball.position, ball.radius, 16, ball.color
-		);
-
 
 		///
 		/// ↑描画処理ここまで
