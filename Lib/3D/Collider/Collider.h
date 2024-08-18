@@ -22,6 +22,9 @@ struct Line {
 	}
 };
 
+using Ray     = Line;
+using Segment = Line;
+
 struct Sphere {
 	Vector3f center;
 	float radius;
@@ -92,11 +95,10 @@ struct OBB {
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// using
-////////////////////////////////////////////////////////////////////////////////////////////
-using Ray     = Line;
-using Segment = Line;
+struct Capsule {
+	Segment segment;
+	float radius;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // methods
@@ -114,6 +116,7 @@ namespace Collider {
 	bool PlaneToSphere(const Plane& plane, const Sphere& sphere);
 	bool PlaneToLine(const Plane& plane, const Line& line);
 	bool PlaneToSegment(const Plane& plane, const Segment& segment);
+	bool PlaneToCapsule(const Plane& plane, const Capsule& capsule, Vector3f* const hitPosition = nullptr);
 	bool SegmentToTriangle(const Segment& segment, const Triangle& triangle);
 	bool AABBTo(const AABB& a, const AABB& b);
 	bool AABBToSphere(const AABB& aabb, const Sphere& sphere);

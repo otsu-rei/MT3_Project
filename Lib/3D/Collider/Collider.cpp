@@ -4,6 +4,7 @@
 // include
 //-----------------------------------------------------------------------------------------
 #include <vector>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // methods
@@ -43,7 +44,7 @@ bool Collider::SphereTo(const Sphere& a, const Sphere& b) {
 bool Collider::PlaneToSphere(const Plane& plane, const Sphere& sphere) {
 
 	float distance = Vector::Dot(plane.normal, sphere.center) - plane.distance;
-	distance = distance < 0.0f ? -distance : distance; // 絶対値
+	distance = std::abs(distance);
 
 	if (distance <= sphere.radius) {
 		return true;
@@ -76,6 +77,33 @@ bool Collider::PlaneToSegment(const Plane& plane, const Segment& segment) {
 	}
 
 	return true;
+}
+
+bool Collider::PlaneToCapsule(const Plane& plane, const Capsule& capsule, Vector3f* const hitPosition) {
+	
+	float dot = Vector::Dot(capsule.segment.diff, plane.normal);
+	float segmentT = 0.0f;
+
+	if (dot != 0.0f) {
+		segmentT = (plane.distance - Vector::Dot(capsule.segment.origin, plane.normal)) / dot;
+		segmentT = std::clamp(segmentT, 0.0f, 1.0f);
+	}
+
+	Vector3f pos = capsule.segment.origin + capsule.segment.diff * segmentT; //!< planeに一番近い座標
+	
+	bool result = PlaneToSphere(plane, Sphere{ pos, capsule.radius});
+
+	if (result) {
+		float distance = Vector::Dot(plane.normal, pos) - plane.distance;
+		distance = std::abs(distance);
+
+		if (hitPosition) {
+			*hitPosition = pos - Vector::Normalize(capsule.segment.diff) * (capsule.radius - distance);
+		}
+	}
+
+	return result;
+
 }
 
 bool Collider::SegmentToTriangle(const Segment& segment, const Triangle& triangle) {

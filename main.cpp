@@ -40,14 +40,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool isUpdate = false;
 
 	Ball ball = {};
-	ball.position = { 0.8f, 1.2f, 0.3f };
+	ball.position     = { 0.8f, 1.2f, 0.3f };
 	ball.acceleration = { 0.0f, -kGrabity, 0.0f };
-	ball.mass = 2.0f;
-	ball.radius = 0.05f;
-	ball.color = 0xFAFAFAFF;
+	ball.mass         = 2.0f;
+	ball.radius       = 0.05f;
+	ball.color        = 0xFAFAFAFF;
 
 	Plane plane = {};
-	plane.normal = Vector::Normalize({-0.2f, 0.9f, -0.3f});
+	plane.normal   = Vector::Normalize({-0.2f, 1.2f, -0.3f});
 	plane.distance = 0.0f;
 
 	const float e = 0.8f;
@@ -79,7 +79,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ball.velocity += ball.acceleration * deltaTime;
 			ball.position += ball.velocity * deltaTime;
 
-			if (Collider::PlaneToSphere(plane, Sphere{ball.position, ball.radius})) {
+			ball.color = 0xFAFAFAFF;
+
+			// capsuleの生成
+			Capsule capsule = {};
+			capsule.radius         = ball.radius;
+			capsule.segment.origin = ball.position;
+			capsule.segment.diff   = ball.velocity * deltaTime;
+
+			if (Collider::PlaneToCapsule(plane, capsule, &ball.position)) {
+
+				ball.color = 0xFA0000FF;
+
 				Vector3f reflected = Vector::Reflect(ball.velocity, plane.normal);
 				Vector3f projectToNormal = Project(reflected, plane.normal);
 				Vector3f movingDirction = reflected - projectToNormal;
