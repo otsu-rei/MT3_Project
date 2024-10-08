@@ -19,6 +19,8 @@
 #include "Collider.h"
 #include "Physics.h"
 
+#include <Random.h>
+
 /***********************************
  * メイン関数 *
  ***********************************/
@@ -40,7 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3f position = { 0.0f, 0.0f, 0.0f };
 	Vector3f direciton = { 1.0f, 0.0f, 0.0f };
 
-	float angle = pi_v / 2.0f;
+	Vector3f u = {}, v = {};
 
 	/***********************************
 	 * ゲームループ *
@@ -63,11 +65,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("direction", &direciton.x, 0.01f);
 		direciton = Vector::Normalize(direciton);
 
-		ImGui::SliderAngle("angle", &angle);
-
 		ImGui::End();
-		
 
+		if (direciton.x == 0.0f && direciton.y == 0.0f) {
+			u = { 1.0f, 0.0f, 0.0f };
+
+		} else {
+			u = Vector::Normalize({ -direciton.y, direciton.x, 0.0f });
+		}
+
+		v = Vector::Normalize(Vector::Cross(direciton, u));
+		
+		float theta = Random::Generate(-pi_v / 2.0f, pi_v / 2.0f);
+		Vector3f spDir = {
+
+		};
 
 		///
 		/// ↑更新処理ここまで
@@ -83,13 +95,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		);
 
 		drawer->DrawLine(
-			position, position + direciton, 0x00FA00FF
+			position, position + direciton, 0xFA0000FF
 		);
 
-		Vector3f newDir = Matrix::Transform(direciton, Matrix::MakeRotateEuler({angle, angle, 0.0f}));
+		drawer->DrawLine(
+			position, position + u, 0x00FA00FF
+		);
 
 		drawer->DrawLine(
-			position, position + newDir, 0x00FAFAFF
+			position, position + v, 0x0000FAFF
 		);
 
 		///
