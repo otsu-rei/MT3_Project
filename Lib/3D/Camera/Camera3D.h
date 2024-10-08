@@ -111,7 +111,7 @@ private:
 	Matrix4x4 viewportMatrix_;
 
 	// debug追加機能として
-	bool isUseControl_ = false;
+	bool isUseControl_ = true;
 	Control control_;
 
 };

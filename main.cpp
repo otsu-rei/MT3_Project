@@ -37,14 +37,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	Quaternion q1 = { 2.0f, 3.0f, 4.0f, 1.0f };
-	Quaternion q2 = { 1.0f, 3.0f, 5.0f, 2.0f };
+	Vector3f position = { 0.0f, 0.0f, 0.0f };
+	Vector3f direciton = { 1.0f, 0.0f, 0.0f };
 
-	Quaternion conj = q1.Conjugation();
-	Quaternion inv = q1.Inverse();
-	Quaternion normlize = q1.Normalize();
-
-
+	float angle = pi_v / 2.0f;
 
 	/***********************************
 	 * ゲームループ *
@@ -64,7 +60,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
+		ImGui::DragFloat3("direction", &direciton.x, 0.01f);
+		direciton = Vector::Normalize(direciton);
+
+		ImGui::SliderAngle("angle", &angle);
+
 		ImGui::End();
+		
+
 
 		///
 		/// ↑更新処理ここまで
@@ -73,12 +76,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-
+		
 		drawer->DrawGrid(
-			{0.0f, 0.0f, 0.0f},
+			{ 0.0f, 0.0f, 0.0f },
 			4.0f, 10, 0x505050FF
 		);
 
+		drawer->DrawLine(
+			position, position + direciton, 0x00FA00FF
+		);
+
+		Vector3f newDir = Matrix::Transform(direciton, Matrix::MakeRotateEuler({angle, angle, 0.0f}));
+
+		drawer->DrawLine(
+			position, position + newDir, 0x00FAFAFF
+		);
 
 		///
 		/// ↑描画処理ここまで
