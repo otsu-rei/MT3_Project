@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Spring spring = {};
 	spring.anchor             = { 0.0f, 1.0f, 0.0f };
 	spring.natureLength       = 0.7f;
-	spring.stiffness          = 100.0f;
+	spring.stiffness          = 1.0f;
 	spring.dampingCoefficient = 2.0f;
 
 	const Vector3f kGravity = { 0.0f, -9.8f, 0.0f };
