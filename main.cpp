@@ -37,20 +37,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto drawer = PrimitiveDrawer::GetInstance();
 	drawer->SetCamera(camera.get());
 
-	bool isUpdate = false;
-
-	Ball ball = {};
-	ball.position     = { 0.8f, 1.2f, 0.3f };
-	ball.acceleration = { 0.0f, -kGrabity, 0.0f };
-	ball.mass         = 2.0f;
-	ball.radius       = 0.05f;
-	ball.color        = 0xFAFAFAFF;
-
-	Plane plane = {};
-	plane.normal   = Vector::Normalize({-0.2f, 1.2f, -0.3f});
-	plane.distance = 0.0f;
-
-	const float e = 0.8f;
+	std::unique_ptr<Camera3D> c = std::make_unique<Camera3D>();
+	c->SetTransform(unitVector, origin, origin);
 
 	/***********************************
 	 * ゲームループ *
@@ -70,34 +58,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Editor");
 		camera->SetOnImGui();
 
-		ImGui::Checkbox("isUpdate", &isUpdate);
+		if (ImGui::TreeNode("c")) {
+			
+			c->SetOnImGui();
+			ImGui::TreePop();
+		}
 
 		ImGui::End();
 
-		if (isUpdate) {
 
-			ball.velocity += ball.acceleration * deltaTime;
-			ball.position += ball.velocity * deltaTime;
 
-			ball.color = 0xFAFAFAFF;
-
-			// capsuleの生成
-			Capsule capsule = {};
-			capsule.radius         = ball.radius;
-			capsule.segment.origin = ball.position;
-			capsule.segment.diff   = ball.velocity * deltaTime;
-
-			if (Collider::PlaneToCapsule(plane, capsule, &ball.position)) {
-
-				ball.color = 0xFA0000FF;
-
-				Vector3f reflected = Vector::Reflect(ball.velocity, plane.normal);
-				Vector3f projectToNormal = Project(reflected, plane.normal);
-				Vector3f movingDirction = reflected - projectToNormal;
-				ball.velocity = projectToNormal * e + movingDirction;
-			}
-
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -107,6 +77,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		const Vector2<uint32_t> size = { 20, 30 };
+
+		for (uint32_t w = 0; w < size.x; ++w) {
+			for (uint32_t h = 0; h < size.y; ++h) {
+
+				Vector2f uv = {
+					static_cast<float>(w) / size.x,
+					static_cast<float>(h) / size.y,
+				};
+
+				Vector2f d = (uv * 2.0f);
+				d.x -= 1.0f;
+				d.y -= 1.0f;
+
+				Vector3f t = Matrix::Transform({d.x, -d.y, 1.0f}, Matrix::Inverse(c->GetProjectionMatrix()));
+				Vector3f direction = Vector::Normalize(Matrix::TransformNormal(t, Matrix::Transpose(c->GetViewMatrix())));
+
+				Vector3f position = Matrix::Transform(origin, Matrix::Transpose(c->GetViewMatrix()));
+
+				drawer->DrawLine(
+					position, position + direction,
+					0xFA0000FF
+				);
+			}
+		}
 
 		///
 		/// ↑描画処理ここまで

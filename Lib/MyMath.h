@@ -68,6 +68,7 @@ namespace Matrix {
 	Matrix4x4 MakeViewport(float left, float top, float width, float height, float minDepth, float maxDepth);
 
 	Vector3f Transform(const Vector3f& vector, const Matrix4x4& matrix);
+	Vector3f TransformNormal(const Vector3f& vector, const Matrix4x4& matrix);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
